@@ -869,6 +869,15 @@ function initPresetSelectors() {
 }
 
 window.applyQuickRoute = function (restCoord, custCoord, restName, custName) {
+  // Update active highlighting on 1-Click Popular Corridor cards
+  document.querySelectorAll(".btn-route-preset").forEach((btn) => {
+    btn.classList.remove("active");
+    const coords = btn.getAttribute("data-coords") || btn.getAttribute("onclick") || "";
+    if (coords.includes(restCoord)) {
+      btn.classList.add("active");
+    }
+  });
+
   const restSel = document.getElementById("preset-restaurant-select");
   const custSel = document.getElementById("preset-customer-select");
   if (restSel) restSel.value = restCoord;
@@ -964,6 +973,12 @@ async function executePrediction() {
         heroCard.classList.add("result-highlight-pop");
       }
 
+      const pointPill = document.getElementById("predict-pointing-indicator");
+      if (pointPill) {
+        pointPill.style.display = "inline-flex";
+        pointPill.innerHTML = `<span>✨</span> <span>AI Delivery Promise Computed • ${roundTripMs} ms inference</span>`;
+      }
+
       if (globalAlert) globalAlert.classList.add("hidden");
     } else {
       const err = await res.json();
@@ -1017,20 +1032,20 @@ function updatePredictionOutput(data, latencyMs) {
     let html = `
       <div class="xai-summary-banner">
         <div>
-          <div style="font-size:0.75rem; color:#6B7280; font-weight:600; text-transform:uppercase;">Standard City Baseline</div>
-          <strong class="font-mono" style="font-size:1.15rem; color:#111827;">${baseVal.toFixed(1)} mins</strong>
+          <div style="font-size:0.7rem; color:#64748B; font-weight:800; text-transform:uppercase; letter-spacing:0.06em;">Standard City Baseline</div>
+          <strong class="font-mono" style="font-size:1.25rem; color:#0F172A; font-weight:900;">${baseVal.toFixed(1)} <span style="font-size:0.78rem; color:#64748B; font-weight:600;">mins</span></strong>
         </div>
-        <div style="font-size:1.4rem; color:#9CA3AF;">&rarr;</div>
+        <div style="font-size:1.4rem; color:#CBD5E1; font-weight:800;">&rarr;</div>
         <div>
-          <div style="font-size:0.75rem; color:#6B7280; font-weight:600; text-transform:uppercase;">Net Model Adjustment</div>
-          <span class="font-mono" style="font-size:1.15rem; font-weight:800; color:${netColor}; background:${netBg}; padding:0.2rem 0.65rem; border-radius:6px; border:1px solid ${netBorder}; display:inline-block;">
+          <div style="font-size:0.7rem; color:#64748B; font-weight:800; text-transform:uppercase; letter-spacing:0.06em;">Net Model Adjustment</div>
+          <span class="font-mono" style="font-size:1.15rem; font-weight:800; color:${netColor}; background:${netBg}; padding:0.25rem 0.75rem; border-radius:8px; border:1px solid ${netBorder}; display:inline-block;">
             ${netSign}${netAdj.toFixed(2)} mins
           </span>
         </div>
-        <div style="font-size:1.4rem; color:#9CA3AF;">=</div>
+        <div style="font-size:1.4rem; color:#CBD5E1; font-weight:800;">=</div>
         <div>
-          <div style="font-size:0.75rem; color:#6B7280; font-weight:600; text-transform:uppercase;">Final Promised Delivery</div>
-          <strong class="font-mono" style="font-size:1.3rem; color:#E23744;">${targetDuration.toFixed(1)} mins</strong>
+          <div style="font-size:0.7rem; color:#64748B; font-weight:800; text-transform:uppercase; letter-spacing:0.06em;">Guaranteed AI Promise</div>
+          <strong class="font-mono" style="font-size:1.35rem; color:#E23744; font-weight:900;">${targetDuration.toFixed(1)} <span style="font-size:0.8rem; color:#E23744; font-weight:700;">mins</span></strong>
         </div>
       </div>
     `;
@@ -1114,9 +1129,15 @@ function initHourSlider() {
   const slider = document.getElementById("inp-order-hour");
   const label = document.getElementById("lbl-order-hour");
   if (slider && label) {
-    slider.addEventListener("input", () => {
-      label.textContent = `${String(slider.value).padStart(2, "0")}:00`;
-    });
+    const updateLabel = () => {
+      const h = parseInt(slider.value, 10);
+      let period = "Off-Peak";
+      if (h >= 12 && h <= 15) period = "Lunch Rush";
+      else if (h >= 19 && h <= 22) period = "Dinner Peak";
+      else if (h >= 23 || h <= 5) period = "Late Night";
+      label.textContent = `${String(h).padStart(2, "0")}:00 (${period})`;
+    };
+    slider.addEventListener("input", updateLabel);
   }
 }
 

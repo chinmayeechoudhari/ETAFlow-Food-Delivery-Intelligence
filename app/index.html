@@ -244,30 +244,45 @@
       ======================================================== -->
       <section id="tab-predict" class="tab-pane">
         <!-- 1-Click Popular Routes Strip -->
-        <div class="zomato-card" style="padding:1rem 1.25rem; margin-bottom:1.25rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
-            <div style="display:flex; align-items:center; gap:0.4rem;">
-              <span style="font-size:1rem;">📍</span>
-              <strong style="font-size:0.875rem; color:#111827;">1-Click Popular Bengaluru Delivery Routes</strong>
-              <span style="font-size:0.75rem; color:#6B7280;">(Click any button to immediately test AI ETA calculation)</span>
+        <div class="zomato-card" style="padding:1.15rem 1.35rem; margin-bottom:1.25rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+              <span style="font-size:1.1rem;">📍</span>
+              <div>
+                <strong style="font-size:0.92rem; color:#0F172A;">1-Click Popular Bengaluru Delivery Corridors</strong>
+                <span style="font-size:0.75rem; color:#64748B; margin-left:0.35rem;">— Instant live route simulation &amp; AI delivery promise computation</span>
+              </div>
             </div>
+            <span style="font-size:0.7rem; font-weight:700; color:#E23744; background:#FFF1F2; border:1px solid #FECDD3; padding:0.2rem 0.6rem; border-radius:999px;">PRESET CORRIDORS</span>
           </div>
-          <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:0.6rem;">
-            <button type="button" class="btn-route-preset active" onclick="applyQuickRoute('12.9352,77.6245', '12.9550,77.6400', 'Truffles (Koramangala)', 'HSR Layout (Sector 4)')">
-              <span class="preset-title">🍔 Truffles → HSR Layout</span>
-              <span class="preset-sub">Koramangala to HSR • 2.77 km</span>
+          <div class="routes-preset-grid">
+            <button type="button" class="btn-route-preset active" data-coords="12.9352,77.6245" onclick="applyQuickRoute('12.9352,77.6245', '12.9550,77.6400', 'Truffles (Koramangala)', 'HSR Layout (Sector 4)')">
+              <div class="preset-title">
+                <span>🍔 Truffles → 🏠 HSR</span>
+                <span class="route-distance-chip">2.77 km</span>
+              </div>
+              <div class="preset-sub">Koramangala 5th Block to HSR Layout Sec 4</div>
             </button>
-            <button type="button" class="btn-route-preset" onclick="applyQuickRoute('12.9784,77.6408', '12.9912,77.6534', 'Meghana Foods (Indiranagar)', 'Indiranagar (100ft Road)')">
-              <span class="preset-title">🍛 Meghana Foods → 100ft Rd</span>
-              <span class="preset-sub">Indiranagar Central • 1.95 km</span>
+            <button type="button" class="btn-route-preset" data-coords="12.9784,77.6408" onclick="applyQuickRoute('12.9784,77.6408', '12.9912,77.6534', 'Meghana Foods (Indiranagar)', 'Indiranagar (100ft Road)')">
+              <div class="preset-title">
+                <span>🍛 Meghana → 🏠 100ft Rd</span>
+                <span class="route-distance-chip">1.95 km</span>
+              </div>
+              <div class="preset-sub">Indiranagar Central 100ft Commercial Hub</div>
             </button>
-            <button type="button" class="btn-route-preset" onclick="applyQuickRoute('12.9716,77.6006', '12.9550,77.6400', 'Empire Restaurant (Church St)', 'Richmond / HSR')">
-              <span class="preset-title">🍗 Empire → Central</span>
-              <span class="preset-sub">Church Street to Central • 3.4 km</span>
+            <button type="button" class="btn-route-preset" data-coords="12.9716,77.6006" onclick="applyQuickRoute('12.9716,77.6006', '12.9550,77.6400', 'Empire Restaurant (Church St)', 'Richmond / HSR')">
+              <div class="preset-title">
+                <span>🍗 Empire → 🏠 Central</span>
+                <span class="route-distance-chip">3.40 km</span>
+              </div>
+              <div class="preset-sub">Church Street Central to South Corridor</div>
             </button>
-            <button type="button" class="btn-route-preset" onclick="applyQuickRoute('12.9250,77.5938', '12.9165,77.6101', 'Corner House (Jayanagar)', 'BTM Layout (2nd Stage)')">
-              <span class="preset-title">🍦 Corner House → BTM</span>
-              <span class="preset-sub">Jayanagar to BTM • 2.1 km</span>
+            <button type="button" class="btn-route-preset" data-coords="12.9250,77.5938" onclick="applyQuickRoute('12.9250,77.5938', '12.9165,77.6101', 'Corner House (Jayanagar)', 'BTM Layout (2nd Stage)')">
+              <div class="preset-title">
+                <span>🍦 Corner House → 🏠 BTM</span>
+                <span class="route-distance-chip">2.10 km</span>
+              </div>
+              <div class="preset-sub">Jayanagar 4th Block to BTM 2nd Stage</div>
             </button>
           </div>
         </div>
@@ -277,152 +292,182 @@
           <div style="display:flex; flex-direction:column; gap:1.25rem;">
             
             <!-- Card 1: Input Form -->
-            <div class="zomato-card" style="padding:1.25rem;">
-              <div style="margin-bottom:1rem; border-bottom:1px solid #E5E7EB; padding-bottom:0.75rem; display:flex; justify-content:space-between; align-items:flex-start;">
+            <div class="zomato-card" style="padding:1.35rem;">
+              <div style="margin-bottom:1.15rem; border-bottom:1px solid #E2E8F0; padding-bottom:0.85rem; display:flex; justify-content:space-between; align-items:center;">
                 <div>
-                  <h3 style="font-size:1.05rem; font-weight:700; color:#111827; margin:0 0 0.2rem 0;">Calculate Delivery ETA Promise</h3>
-                  <p style="font-size:0.75rem; color:#6B7280; margin:0;">Real-time booking-time inference via Random Forest champion</p>
+                  <h3 style="font-size:1.1rem; font-weight:800; color:#0F172A; margin:0 0 0.2rem 0; display:flex; align-items:center; gap:0.4rem;">
+                    <span>⏱️</span> <span>Calculate Delivery ETA Promise</span>
+                  </h3>
+                  <p style="font-size:0.76rem; color:#64748B; margin:0;">Real-time booking-time inference via Random Forest production model</p>
                 </div>
-                <button type="button" class="btn btn-secondary btn-sm" id="btn-toggle-custom-loc" style="font-size:0.72rem; padding:0.3rem 0.6rem; font-weight:700;" onclick="toggleCustomLocationMode()">
+                <button type="button" class="btn-custom-loc-toggle" id="btn-toggle-custom-loc" onclick="toggleCustomLocationMode()">
                   <span id="btn-custom-toggle-icon">✏️</span> <span id="btn-custom-toggle-text">Custom Location</span>
                 </button>
               </div>
 
               <form id="predict-form">
-                <!-- Location Selectors -->
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin-bottom:0.85rem;">
-                  <div>
-                    <label class="form-label" style="font-size:0.72rem; font-weight:700;">Pickup Restaurant</label>
-                    <select class="form-control" id="preset-restaurant-select" style="font-size:0.78rem;">
-                      <option value="12.9352,77.6245" selected>🍔 Truffles (Koramangala)</option>
-                      <option value="12.9784,77.6408">🍛 Meghana Foods (Indiranagar)</option>
-                      <option value="12.9716,77.6006">🍗 Empire (Church Street / MG Rd)</option>
-                      <option value="12.9250,77.5938">🍦 Corner House (Jayanagar 4th Block)</option>
-                      <option value="12.9793,77.6402">🍺 Toit Brewpub (Indiranagar 100ft)</option>
-                      <option value="12.9723,77.6083">🌶️ Nagarjuna (Residency Road)</option>
-                      <option value="12.9719,77.6412">☕ The Rameshwaram Cafe (Indiranagar)</option>
-                      <option value="12.9430,77.5710">🥞 Vidyarthi Bhavan (Gandhi Bazaar)</option>
-                      <option value="13.0033,77.5707">🥘 CTR / Shri Sagar (Malleshwaram)</option>
-                      <option value="12.9698,77.7499">🍢 Barbeque Nation (Whitefield ITPL)</option>
-                      <option value="12.9115,77.6385">🍔 Leon's Burgers (HSR Layout Sec 4)</option>
-                      <option value="12.9554,77.5855">🍛 MTR (Lalbagh Road)</option>
-                      <option value="custom">✏️ Enter Custom Bangalore Restaurant...</option>
-                    </select>
+                <!-- Fieldset 1: Route & Location -->
+                <div class="form-section-group">
+                  <div class="form-section-title">
+                    <span>📍 1. Route &amp; Location Hubs</span>
+                    <span class="form-section-tag">Bengaluru Network</span>
                   </div>
-                  <div>
-                    <label class="form-label" style="font-size:0.72rem; font-weight:700;">Delivery Area</label>
-                    <select class="form-control" id="preset-customer-select" style="font-size:0.78rem;">
-                      <option value="12.9550,77.6400" selected>🏠 HSR Layout (Sector 4)</option>
-                      <option value="12.9165,77.6101">🏠 BTM Layout (2nd Stage)</option>
-                      <option value="12.9912,77.6534">🏠 Indiranagar (100ft Rd / Defence Colony)</option>
-                      <option value="12.9980,77.7750">🏠 Whitefield (ITPL Gate / EPIP Zone)</option>
-                      <option value="12.9344,77.6190">🏠 Koramangala (5th Block)</option>
-                      <option value="12.9280,77.5830">🏠 Jayanagar (4th T Block)</option>
-                      <option value="12.8399,77.6770">🏠 Electronic City (Phase 1 Wipro Gate)</option>
-                      <option value="12.9260,77.6762">🏠 Bellandur (EcoSpace Outer Ring Rd)</option>
-                      <option value="13.0010,77.6150">🏠 Frazer Town (Mosque Road)</option>
-                      <option value="12.9650,77.6050">🏠 Richmond Town / Brigade Road</option>
-                      <option value="13.0080,77.5680">🏠 Malleshwaram (Sampige Road 18th Cross)</option>
-                      <option value="13.0180,77.6420">🏠 Kalyan Nagar (HRBR Layout)</option>
-                      <option value="custom">✏️ Enter Custom Delivery Area...</option>
-                    </select>
-                  </div>
-                </div>
-
-                <!-- Custom Address / Coordinate Drawer (Toggleable) -->
-                <div class="custom-loc-drawer" id="custom-coords-container" style="display:none;">
-                  <div style="font-size:0.75rem; font-weight:700; color:#E23744; margin-bottom:0.4rem; display:flex; justify-content:space-between;">
-                    <span>📍 Enter Custom Location or Drag Pins on Map</span>
-                    <span style="font-size:0.7rem; color:#6B7280; font-weight:normal;">Auto-syncs with road map</span>
-                  </div>
-                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.5rem; margin-bottom:0.4rem;">
+                  
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.65rem;">
                     <div>
-                      <span style="font-size:0.68rem; color:#4B5563; font-weight:600;">Restaurant Coordinates (Lat, Lon):</span>
-                      <div style="display:flex; gap:0.3rem;">
-                        <input type="number" step="0.0001" class="input-control font-mono" id="inp-rest-lat" value="12.9352" style="font-size:0.75rem; padding:0.3rem;" title="Restaurant Latitude">
-                        <input type="number" step="0.0001" class="input-control font-mono" id="inp-rest-lon" value="77.6245" style="font-size:0.75rem; padding:0.3rem;" title="Restaurant Longitude">
-                      </div>
+                      <label class="form-label" style="font-size:0.72rem; font-weight:700;">Pickup Restaurant</label>
+                      <select class="form-control" id="preset-restaurant-select" style="font-size:0.8rem; width:100%;">
+                        <option value="12.9352,77.6245" selected>🍔 Truffles (Koramangala)</option>
+                        <option value="12.9784,77.6408">🍛 Meghana Foods (Indiranagar)</option>
+                        <option value="12.9716,77.6006">🍗 Empire (Church Street / MG Rd)</option>
+                        <option value="12.9250,77.5938">🍦 Corner House (Jayanagar 4th Block)</option>
+                        <option value="12.9793,77.6402">🍺 Toit Brewpub (Indiranagar 100ft)</option>
+                        <option value="12.9723,77.6083">🌶️ Nagarjuna (Residency Road)</option>
+                        <option value="12.9719,77.6412">☕ The Rameshwaram Cafe (Indiranagar)</option>
+                        <option value="12.9430,77.5710">🥞 Vidyarthi Bhavan (Gandhi Bazaar)</option>
+                        <option value="13.0033,77.5707">🥘 CTR / Shri Sagar (Malleshwaram)</option>
+                        <option value="12.9698,77.7499">🍢 Barbeque Nation (Whitefield ITPL)</option>
+                        <option value="12.9115,77.6385">🍔 Leon's Burgers (HSR Layout Sec 4)</option>
+                        <option value="12.9554,77.5855">🍛 MTR (Lalbagh Road)</option>
+                        <option value="custom">✏️ Enter Custom Bangalore Restaurant...</option>
+                      </select>
                     </div>
                     <div>
-                      <span style="font-size:0.68rem; color:#4B5563; font-weight:600;">Customer Coordinates (Lat, Lon):</span>
-                      <div style="display:flex; gap:0.3rem;">
-                        <input type="number" step="0.0001" class="input-control font-mono" id="inp-cust-lat" value="12.9550" style="font-size:0.75rem; padding:0.3rem;" title="Customer Latitude">
-                        <input type="number" step="0.0001" class="input-control font-mono" id="inp-cust-lon" value="77.6400" style="font-size:0.75rem; padding:0.3rem;" title="Customer Longitude">
+                      <label class="form-label" style="font-size:0.72rem; font-weight:700;">Delivery Area</label>
+                      <select class="form-control" id="preset-customer-select" style="font-size:0.8rem; width:100%;">
+                        <option value="12.9550,77.6400" selected>🏠 HSR Layout (Sector 4)</option>
+                        <option value="12.9165,77.6101">🏠 BTM Layout (2nd Stage)</option>
+                        <option value="12.9912,77.6534">🏠 Indiranagar (100ft Rd / Defence Colony)</option>
+                        <option value="12.9980,77.7750">🏠 Whitefield (ITPL Gate / EPIP Zone)</option>
+                        <option value="12.9344,77.6190">🏠 Koramangala (5th Block)</option>
+                        <option value="12.9280,77.5830">🏠 Jayanagar (4th T Block)</option>
+                        <option value="12.8399,77.6770">🏠 Electronic City (Phase 1 Wipro Gate)</option>
+                        <option value="12.9260,77.6762">🏠 Bellandur (EcoSpace Outer Ring Rd)</option>
+                        <option value="13.0010,77.6150">🏠 Frazer Town (Mosque Road)</option>
+                        <option value="12.9650,77.6050">🏠 Richmond Town / Brigade Road</option>
+                        <option value="13.0080,77.5680">🏠 Malleshwaram (Sampige Road 18th Cross)</option>
+                        <option value="13.0180,77.6420">🏠 Kalyan Nagar (HRBR Layout)</option>
+                        <option value="custom">✏️ Enter Custom Delivery Area...</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Custom Address / Coordinate Drawer (Toggleable) -->
+                  <div class="custom-loc-drawer" id="custom-coords-container" style="display:none;">
+                    <div style="font-size:0.75rem; font-weight:800; color:#E23744; margin-bottom:0.4rem; display:flex; justify-content:space-between; align-items:center;">
+                      <span>📍 Enter Exact Coordinates or Drag Pins on Map</span>
+                      <span style="font-size:0.68rem; color:#64748B; font-weight:600;">Auto-syncs live with road map</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.65rem;">
+                      <div>
+                        <span style="font-size:0.68rem; color:#475569; font-weight:700;">Restaurant (Lat, Lon):</span>
+                        <div style="display:flex; gap:0.35rem; margin-top:0.2rem;">
+                          <input type="number" step="0.0001" class="input-control font-mono" id="inp-rest-lat" value="12.9352" style="font-size:0.76rem; padding:0.35rem;" title="Restaurant Latitude">
+                          <input type="number" step="0.0001" class="input-control font-mono" id="inp-rest-lon" value="77.6245" style="font-size:0.76rem; padding:0.35rem;" title="Restaurant Longitude">
+                        </div>
+                      </div>
+                      <div>
+                        <span style="font-size:0.68rem; color:#475569; font-weight:700;">Customer (Lat, Lon):</span>
+                        <div style="display:flex; gap:0.35rem; margin-top:0.2rem;">
+                          <input type="number" step="0.0001" class="input-control font-mono" id="inp-cust-lat" value="12.9550" style="font-size:0.76rem; padding:0.35rem;" title="Customer Latitude">
+                          <input type="number" step="0.0001" class="input-control font-mono" id="inp-cust-lon" value="77.6400" style="font-size:0.76rem; padding:0.35rem;" title="Customer Longitude">
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <!-- Time and Day -->
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:0.85rem;">
-                  <div class="form-group" style="margin:0;">
-                    <label class="form-label" for="inp-order-hour" style="font-size:0.72rem;">Order Time: <strong class="font-mono" id="lbl-order-hour" style="color:#E23744;">20:00 (Dinner Peak)</strong></label>
-                    <input type="range" min="0" max="23" value="20" class="form-control" id="inp-order-hour" style="padding:0.25rem;">
+                <!-- Fieldset 2: Timing & Cadence -->
+                <div class="form-section-group">
+                  <div class="form-section-title">
+                    <span>⏱️ 2. Timing &amp; Cadence</span>
+                    <span class="form-section-tag">Peak Traffic Model</span>
                   </div>
-                  <div class="form-group" style="margin:0;">
-                    <label class="form-label" for="inp-day-of-week" style="font-size:0.72rem;">Day of Week</label>
-                    <select class="form-control" id="inp-day-of-week" style="font-size:0.78rem;">
-                      <option value="0">Monday</option>
-                      <option value="1">Tuesday</option>
-                      <option value="2">Wednesday</option>
-                      <option value="3">Thursday</option>
-                      <option value="4" selected>Friday (Weekend Eve)</option>
-                      <option value="5">Saturday (Peak Surge)</option>
-                      <option value="6">Sunday (Family Dining)</option>
-                    </select>
-                  </div>
-                </div>
-
-                <!-- Order Type & Surge -->
-                <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.5rem; margin-bottom:1.15rem;">
-                  <div>
-                    <label class="form-label" for="inp-order-type" style="font-size:0.72rem;">Order Type</label>
-                    <select class="form-control" id="inp-order-type" style="font-size:0.78rem;">
-                      <option value="Meal" selected>Meal</option>
-                      <option value="Snack">Snack</option>
-                      <option value="Drinks">Drinks</option>
-                      <option value="Buffet">Buffet</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="form-label" for="inp-festival" style="font-size:0.72rem;">Festival / Holiday</label>
-                    <select class="form-control" id="inp-festival" style="font-size:0.78rem;">
-                      <option value="No" selected>No</option>
-                      <option value="Yes">Yes (+Surge)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="form-label" for="inp-city" style="font-size:0.72rem;">City Density</label>
-                    <select class="form-control" id="inp-city" style="font-size:0.78rem;">
-                      <option value="Metropolitian" selected>Metro</option>
-                      <option value="Urban">Urban</option>
-                      <option value="Semi-Urban">Semi-Urban</option>
-                    </select>
+                  
+                  <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:0.75rem; align-items:center;">
+                    <div>
+                      <label class="form-label" for="inp-order-hour" style="font-size:0.72rem;">
+                        <span>Order Time:</span>
+                        <strong class="font-mono" id="lbl-order-hour" style="color:#E23744; font-size:0.78rem;">20:00 (Dinner Peak)</strong>
+                      </label>
+                      <input type="range" min="0" max="23" value="20" class="form-control" id="inp-order-hour" style="padding:0.2rem; width:100%;">
+                    </div>
+                    <div>
+                      <label class="form-label" for="inp-day-of-week" style="font-size:0.72rem;">Day of Week</label>
+                      <select class="form-control" id="inp-day-of-week" style="font-size:0.8rem; width:100%;">
+                        <option value="0">Monday (Regular)</option>
+                        <option value="1">Tuesday (Regular)</option>
+                        <option value="2">Wednesday (Mid-week)</option>
+                        <option value="3">Thursday (Regular)</option>
+                        <option value="4" selected>Friday (Weekend Eve)</option>
+                        <option value="5">Saturday (Peak Surge)</option>
+                        <option value="6">Sunday (Family Dining)</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary" id="predict-btn" style="width:100%; padding:0.85rem; font-size:1rem; font-weight:800; background:#E23744; border-color:#E23744; letter-spacing:0.02em; box-shadow:0 4px 14px rgba(226,55,68,0.25);">
+                <!-- Fieldset 3: Operational Conditions -->
+                <div class="form-section-group" style="margin-bottom:1.15rem;">
+                  <div class="form-section-title">
+                    <span>🚦 3. Operational Context</span>
+                    <span class="form-section-tag">Urban Friction</span>
+                  </div>
+                  
+                  <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:0.55rem;">
+                    <div>
+                      <label class="form-label" for="inp-order-type" style="font-size:0.72rem;">Order Type</label>
+                      <select class="form-control" id="inp-order-type" style="font-size:0.78rem; width:100%;">
+                        <option value="Meal" selected>Meal</option>
+                        <option value="Snack">Snack</option>
+                        <option value="Drinks">Drinks</option>
+                        <option value="Buffet">Buffet</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="form-label" for="inp-festival" style="font-size:0.72rem;">Festival / Holiday</label>
+                      <select class="form-control" id="inp-festival" style="font-size:0.78rem; width:100%;">
+                        <option value="No" selected>No</option>
+                        <option value="Yes">Yes (+Surge)</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="form-label" for="inp-city" style="font-size:0.72rem;">City Density</label>
+                      <select class="form-control" id="inp-city" style="font-size:0.78rem; width:100%;">
+                        <option value="Metropolitian" selected>Metro</option>
+                        <option value="Urban">Urban</option>
+                        <option value="Semi-Urban">Semi-Urban</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Calculate CTA Button -->
+                <button type="submit" class="btn-calculate-promise" id="predict-btn">
                   <span id="predict-btn-text">⚡ Calculate Delivery Promise</span>
-                  <span class="hidden" id="predict-spinner">⏳ Running Random Forest...</span>
+                  <span class="hidden" id="predict-spinner">⏳ Running Random Forest v1.0...</span>
                 </button>
               </form>
             </div>
 
             <!-- Card 2: Interactive Spatial Route & Geometry Map (Directly below Form!) -->
-            <div class="zomato-card" style="padding:0; overflow:hidden; border-radius:12px;">
-              <div style="padding:0.75rem 1rem; background:#FFFFFF; border-bottom:1px solid #E5E7EB; display:flex; justify-content:space-between; align-items:center;">
-                <div style="display:flex; align-items:center; gap:0.4rem;">
-                  <span style="font-size:1.1rem;">🗺️</span>
-                  <strong style="font-size:0.875rem; color:#111827;">Interactive Route &amp; Road Geometry</strong>
+            <div class="predict-map-card">
+              <div class="predict-map-header">
+                <div style="display:flex; align-items:center; gap:0.5rem;">
+                  <span style="font-size:1.15rem;">🗺️</span>
+                  <div>
+                    <strong style="font-size:0.88rem; color:#0F172A;">Interactive Route &amp; Road Geometry</strong>
+                    <div style="font-size:0.7rem; color:#64748B;">Live road route corridor via Leaflet.js &amp; OSRM</div>
+                  </div>
                 </div>
-                <span style="font-size:0.72rem; color:#E23744; font-weight:700; background:#FFF0F1; padding:0.2rem 0.5rem; border-radius:4px;" id="predict-routing-badge">OSRM Road Geometry</span>
+                <span style="font-size:0.72rem; color:#E23744; font-weight:700; background:#FFF1F2; border:1px solid #FECDD3; padding:0.25rem 0.65rem; border-radius:999px;" id="predict-routing-badge">OSRM Road Geometry</span>
               </div>
-              <div style="position:relative; height:360px; width:100%;">
-                <div id="predict-map" class="map-frame-wrapper" style="height:360px; width:100%; background:#FAF8F5;"></div>
+              <div style="position:relative; height:380px; width:100%;">
+                <div id="predict-map" class="map-frame-wrapper" style="height:380px; width:100%; background:#FAF8F5;"></div>
               </div>
-              <div style="padding:0.6rem 1rem; background:#FAFAFA; border-top:1px solid #E5E7EB; font-size:0.72rem; color:#6B7280; display:flex; justify-content:space-between; align-items:center;">
+              <div class="predict-map-footer">
                 <span>📍 Drag <strong>🍳 Restaurant</strong> or <strong>🏠 Customer</strong> pins to customize coordinates</span>
-                <span id="predict-haversine-hint" class="font-mono" style="font-weight:700; color:#111827;">Distance: 2.77 km</span>
+                <span id="predict-haversine-hint" class="font-mono" style="font-weight:800; color:#0F172A;">Distance: 2.77 km</span>
               </div>
             </div>
 
@@ -432,35 +477,52 @@
           <div style="display:flex; flex-direction:column; gap:1.25rem;">
             
             <!-- Large Zomato ETA Hero Card -->
-            <div class="zomato-card eta-hero-result-card" id="eta-hero-card" style="padding:1.6rem; text-align:center; background:#FFFFFF; border:2px solid #FDC7CC; border-radius:12px;">
+            <div class="zomato-card eta-hero-result-card" id="eta-hero-card">
               <div id="predict-pointing-indicator" class="pointing-results-pill" style="display:none;">
-                <span>👉</span> <span>New AI Delivery Promise Computed</span>
+                <span>✨</span> <span>AI Delivery Promise Computed • Real-Time OSRM Route</span>
               </div>
-              <div style="font-size:0.78rem; font-weight:800; color:#E23744; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.25rem;">Guaranteed Doorstep Delivery Time</div>
-              <div class="font-mono" style="font-size:4rem; font-weight:800; color:#E23744; line-height:1.05; margin:0.35rem 0;" id="predict-duration-val">20.3</div>
-              <div style="font-size:1.05rem; font-weight:700; color:#374151;">minutes to customer doorstep</div>
               
-              <div style="display:flex; justify-content:center; gap:2rem; margin-top:1.15rem; padding-top:0.95rem; border-top:1px solid #F3F4F6; font-size:0.84rem; flex-wrap:wrap;">
-                <div>Route Distance: <strong class="font-mono" id="predict-distance-val">2.77 km</strong></div>
-                <div>Inference Speed: <strong class="font-mono" style="color:#10B981;" id="predict-latency-val">3.2 ms</strong></div>
-                <div>Production Model: <strong id="predict-model-id-val">RandomForest Champion v1.0</strong></div>
+              <div class="eta-hero-header-badge">
+                <span>⏱️</span> <span>Guaranteed Doorstep Delivery Time</span>
+              </div>
+              
+              <div class="eta-hero-duration-wrap">
+                <span class="eta-hero-duration-number" id="predict-duration-val">20.3</span>
+                <span class="eta-hero-duration-unit">min</span>
+              </div>
+              
+              <div class="eta-hero-subtitle">minutes to customer doorstep</div>
+              
+              <div class="eta-hero-stats-grid">
+                <div class="eta-hero-stat-item">
+                  <span class="eta-hero-stat-label">Route Distance</span>
+                  <span class="eta-hero-stat-val" id="predict-distance-val">2.77 km</span>
+                </div>
+                <div class="eta-hero-stat-item">
+                  <span class="eta-hero-stat-label">Inference Speed</span>
+                  <span class="eta-hero-stat-val" style="color:#10B981;" id="predict-latency-val">3.2 ms</span>
+                </div>
+                <div class="eta-hero-stat-item">
+                  <span class="eta-hero-stat-label">Production Model</span>
+                  <span class="eta-hero-stat-val" id="predict-model-id-val" style="font-size:0.8rem;">RandomForest v1.0</span>
+                </div>
               </div>
             </div>
 
             <!-- Explainable AI: Plain-English Factors (High-Impact Presentation Styling) -->
-            <div class="zomato-card" id="predict-xai-card" style="padding:1.35rem; border-radius:12px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.85rem; border-bottom:1px solid #F3F4F6; padding-bottom:0.65rem;">
+            <div class="zomato-card" id="predict-xai-card" style="padding:1.4rem; border-radius:14px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.95rem; border-bottom:1px solid #F1F5F9; padding-bottom:0.75rem;">
                 <div>
-                  <div style="font-size:1rem; font-weight:800; color:#111827; display:flex; align-items:center; gap:0.4rem;">
+                  <div style="font-size:1.02rem; font-weight:800; color:#0F172A; display:flex; align-items:center; gap:0.45rem;">
                     <span>🔍</span> <span>Why this Delivery Time? (Key Decision Factors)</span>
                   </div>
-                  <div style="font-size:0.75rem; color:#6B7280; margin-top:0.15rem;">Explainable AI breakdown showing exactly how traffic, festival, and route distance impacted this ETA</div>
+                  <div style="font-size:0.76rem; color:#64748B; margin-top:0.2rem;">TreeSHAP-aligned local feature attributions showing exact delay &amp; savings contributors</div>
                 </div>
-                <span style="font-size:0.72rem; font-weight:700; background:#FFF0F1; color:#E23744; padding:0.25rem 0.6rem; border-radius:99px; border:1px solid #FDC7CC;">SHAP Factor Attribution</span>
+                <span style="font-size:0.72rem; font-weight:700; background:#FFF1F2; color:#E23744; padding:0.25rem 0.65rem; border-radius:999px; border:1px solid #FECDD3;">SHAP Additive Attribution</span>
               </div>
               
-              <div id="predict-xai-attributions-list" style="display:flex; flex-direction:column; gap:0.6rem;">
-                <div style="font-size:0.82rem; color:#6B7280; text-align:center; padding:1.5rem;">
+              <div id="predict-xai-attributions-list" style="display:flex; flex-direction:column; gap:0.65rem;">
+                <div style="font-size:0.84rem; color:#64748B; text-align:center; padding:1.75rem;">
                   Click &ldquo;Calculate Delivery Promise&rdquo; to compute live feature attributions.
                 </div>
               </div>
