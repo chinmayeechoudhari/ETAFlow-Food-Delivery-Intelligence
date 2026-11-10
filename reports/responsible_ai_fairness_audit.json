@@ -1,0 +1,34 @@
+{
+  "audit_name": "ETAFlow Regional Demographic Fairness Audit",
+  "total_evaluated_records": 7793,
+  "overall_mae_minutes": 6.141,
+  "max_subgroup_mae_disparity_minutes": 3.157,
+  "fairness_status": "REVIEW_REQUIRED",
+  "subgroups": {
+    "Metropolitian": {
+      "sample_count": 6037,
+      "mae_minutes": 6.083,
+      "rmse_minutes": 7.629,
+      "error_bias_minutes": 0.037,
+      "mean_actual_duration_minutes": 27.36,
+      "mean_predicted_duration_minutes": 27.4
+    },
+    "Semi-Urban": {
+      "sample_count": 27,
+      "mae_minutes": 2.984,
+      "rmse_minutes": 5.585,
+      "error_bias_minutes": -0.98,
+      "mean_actual_duration_minutes": 49.63,
+      "mean_predicted_duration_minutes": 48.65
+    },
+    "Urban": {
+      "sample_count": 1729,
+      "mae_minutes": 6.392,
+      "rmse_minutes": 7.964,
+      "error_bias_minutes": 0.14,
+      "mean_actual_duration_minutes": 23.17,
+      "mean_predicted_duration_minutes": 23.31
+    }
+  },
+  "fairness_criterion": "Equalized Mean Absolute Error (Demographic Parity Disparity < 2.0 minutes)"
+}

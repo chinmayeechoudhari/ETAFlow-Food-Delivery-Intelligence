@@ -1,0 +1,66 @@
+name: ETAFlow CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint-and-test:
+    name: Lint, Test & Benchmark
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]" mlflow
+
+      - name: Copy Environment Configuration
+        run: |
+          cp .env.example .env
+
+      - name: Run Linter (Ruff)
+        run: |
+          ruff check src pipelines tests
+
+      - name: Run Unit & Integration Tests (Pytest)
+        env:
+          PYTHONPATH: src
+        run: |
+          pytest -v --durations=10
+
+      - name: Run Batch Prediction Pipeline
+        env:
+          PYTHONPATH: src
+        run: |
+          python pipelines/batch_predict.py
+
+      - name: Run Latency Benchmark
+        env:
+          PYTHONPATH: src
+        run: |
+          python scripts/benchmark_latency.py --iterations 100
+
+      - name: Run Responsible AI Fairness Audit
+        env:
+          PYTHONPATH: src
+        run: |
+          python pipelines/audit_fairness.py
+
+      - name: Upload Benchmark & Audit Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: etaflow-evaluation-reports
+          path: reports/
+

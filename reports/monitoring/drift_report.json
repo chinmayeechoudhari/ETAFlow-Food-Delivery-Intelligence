@@ -1,6 +1,6 @@
 {
   "report_title": "ETAFlow Data & Prediction Drift Monitoring Report",
-  "generated_at_utc": "2026-10-29T15:31:29.547485+00:00",
+  "generated_at_utc": "2026-11-10T09:35:37.505069+00:00",
   "dataset_fingerprint": "a76ed049cd698b189797b180ffce60dcdad7b45b99729cd171b5562ec585eb0c",
   "sample_size_per_batch": 1500,
   "monitoring_thresholds": {
@@ -11,7 +11,7 @@
   },
   "clean_batch_results": {
     "batch_label": "clean_held_out_test_batch",
-    "evaluated_at_utc": "2026-10-29T15:31:28.708203+00:00",
+    "evaluated_at_utc": "2026-11-10T09:35:36.887128+00:00",
     "is_synthetic": false,
     "sample_size": 1500,
     "total_features_evaluated": 17,
@@ -261,7 +261,7 @@
   },
   "simulated_drift_results": {
     "batch_label": "simulated_drift_monsoon_surge",
-    "evaluated_at_utc": "2026-10-29T15:31:29.522877+00:00",
+    "evaluated_at_utc": "2026-11-10T09:35:37.479063+00:00",
     "is_synthetic": true,
     "sample_size": 1500,
     "total_features_evaluated": 17,

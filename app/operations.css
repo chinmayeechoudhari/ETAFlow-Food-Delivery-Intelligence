@@ -11,7 +11,7 @@
   gap: 1rem;
   background: var(--bg-card);
   border: 1px solid var(--border-card);
-  border-left: 4px solid var(--accent-purple);
+  border-left: 4px solid var(--zomato-red);
   border-radius: var(--radius-md);
   padding: 1rem 1.25rem;
   margin-bottom: 1.5rem;
@@ -28,9 +28,9 @@
   margin-left: auto;
   font-size: 0.75rem;
   font-family: var(--font-mono);
-  background: var(--accent-lavender-bg);
-  color: var(--accent-purple);
-  border: 1px solid var(--accent-lavender-border);
+  background: #FFF0F1;
+  color: #E23744;
+  border: 1px solid #FDC7CC;
   padding: 0.2rem 0.55rem;
   border-radius: var(--radius-sm);
   white-space: nowrap;
@@ -132,7 +132,7 @@
   font-family: var(--font-mono);
   font-size: 2rem;
   font-weight: 800;
-  color: var(--accent-purple);
+  color: #E23744;
 }
 
 .sim-speed-btn-group {
@@ -159,7 +159,7 @@
 
 .speed-pill.active {
   background: #FFFFFF;
-  color: var(--accent-purple);
+  color: #E23744;
   box-shadow: var(--shadow-xs);
 }
 
@@ -204,9 +204,9 @@
 }
 
 .stage-step.active {
-  background: var(--accent-lavender-bg);
-  border-color: var(--accent-lavender-border);
-  color: var(--accent-purple);
+  background: #FFF0F1;
+  border-color: #FDC7CC;
+  color: #E23744;
   box-shadow: var(--shadow-xs);
 }
 
@@ -230,7 +230,7 @@
 
 .sim-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #7C3AED, #38BDF8);
+  background: linear-gradient(90deg, #E23744, #FF5A68);
   border-radius: var(--radius-full);
   transition: width 0.3s ease;
 }

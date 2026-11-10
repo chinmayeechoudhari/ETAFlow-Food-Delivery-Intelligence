@@ -16,6 +16,9 @@ const API_BASE_URL = "http://127.0.0.1:8000";
 const DEFAULT_DEMO_ORDERS = [
   {
     order_id: "KOR-DINNER-88",
+    courier_name: "Rahul S.",
+    restaurant_name: "Truffles (Koramangala)",
+    customer_area: "HSR Layout (Sector 4)",
     restaurant_lat: 12.9352,
     restaurant_lon: 77.6245,
     customer_lat: 12.9550,
@@ -30,76 +33,64 @@ const DEFAULT_DEMO_ORDERS = [
     prediction_source: "Preset Demo Baseline",
     model_identity: "random_forest_regressor (Preset)",
     status: "OUT_FOR_DELIVERY",
-    simulation_elapsed_seconds: 70.0,
-    stage_progress_pct: 68.0,
+    simulation_elapsed_seconds: 540.0,
+    stage_progress_pct: 45.0,
     simulated_actual_duration_minutes: null,
     delay_cause: null
   },
   {
-    order_id: "IND-SNACK-12",
+    order_id: "IND-LUNCH-42",
+    courier_name: "Suresh M.",
+    restaurant_name: "Meghana Foods (Indiranagar)",
+    customer_area: "100ft Road Defence Colony",
     restaurant_lat: 12.9784,
     restaurant_lon: 77.6408,
     customer_lat: 12.9912,
     customer_lon: 77.6534,
-    order_hour: 16,
-    day_of_week: 6, // Sunday
-    type_of_order: "Snack",
+    order_hour: 13,
+    day_of_week: 2, // Wednesday
+    type_of_order: "Meal",
     festival: "No",
-    city: "Urban",
-    predicted_duration_minutes: 17.6,
+    city: "Metropolitian",
+    predicted_duration_minutes: 16.8,
     distance_km: 1.95,
     prediction_source: "Preset Demo Baseline",
     model_identity: "random_forest_regressor (Preset)",
-    status: "DELIVERED",
-    simulation_elapsed_seconds: 105.0,
-    stage_progress_pct: 100.0,
-    simulated_actual_duration_minutes: 18.2,
-    delay_cause: "Simulated on-time arrival within SLA threshold"
+    status: "OUT_FOR_DELIVERY",
+    simulation_elapsed_seconds: 300.0,
+    stage_progress_pct: 30.0,
+    simulated_actual_duration_minutes: null,
+    delay_cause: null
   },
   {
     order_id: "FEST-FEAST-99",
-    restaurant_lat: 13.0358,
-    restaurant_lon: 77.5970,
-    customer_lat: 13.0600,
-    customer_lon: 77.6200,
+    courier_name: "Amit K.",
+    restaurant_name: "Empire Restaurant (Church Street)",
+    customer_area: "Frazer Town Mosque Road",
+    restaurant_lat: 12.9716,
+    restaurant_lon: 77.6006,
+    customer_lat: 13.0010,
+    customer_lon: 77.6150,
     order_hour: 21,
     day_of_week: 5, // Saturday
     type_of_order: "Meal",
     festival: "Yes",
     city: "Semi-Urban",
     predicted_duration_minutes: 27.8,
-    distance_km: 3.65,
+    distance_km: 3.85,
     prediction_source: "Preset Demo Baseline",
     model_identity: "random_forest_regressor (Preset)",
-    status: "DELIVERED",
-    simulation_elapsed_seconds: 165.0,
-    stage_progress_pct: 100.0,
-    simulated_actual_duration_minutes: 29.1,
-    delay_cause: "Synthetic festival kitchen queue delay (Simulated Factor)"
-  },
-  {
-    order_id: "HSR-LUNCH-42",
-    restaurant_lat: 12.9121,
-    restaurant_lon: 77.6446,
-    customer_lat: 12.9215,
-    customer_lon: 77.6510,
-    order_hour: 13,
-    day_of_week: 2, // Wednesday
-    type_of_order: "Meal",
-    festival: "No",
-    city: "Metropolitian",
-    predicted_duration_minutes: 15.4,
-    distance_km: 1.35,
-    prediction_source: "Preset Demo Baseline",
-    model_identity: "random_forest_regressor (Preset)",
-    status: "DELIVERED",
-    simulation_elapsed_seconds: 90.0,
-    stage_progress_pct: 100.0,
-    simulated_actual_duration_minutes: 14.8,
-    delay_cause: "Simulated on-time arrival within SLA threshold"
+    status: "OUT_FOR_DELIVERY",
+    simulation_elapsed_seconds: 1000.0,
+    stage_progress_pct: 60.0,
+    simulated_actual_duration_minutes: null,
+    delay_cause: null
   },
   {
     order_id: "MG-DRINKS-07",
+    courier_name: "Deepak R.",
+    restaurant_name: "Toit (Indiranagar)",
+    customer_area: "Domlur 2nd Stage",
     restaurant_lat: 12.9756,
     restaurant_lon: 77.6066,
     customer_lat: 12.9840,
@@ -120,28 +111,10 @@ const DEFAULT_DEMO_ORDERS = [
     delay_cause: null
   },
   {
-    order_id: "WFD-BUFFET-03",
-    restaurant_lat: 12.9698,
-    restaurant_lon: 77.7499,
-    customer_lat: 12.9980,
-    customer_lon: 77.7750,
-    order_hour: 20,
-    day_of_week: 4, // Friday
-    type_of_order: "Buffet",
-    festival: "No",
-    city: "Metropolitian",
-    predicted_duration_minutes: 32.1,
-    distance_km: 5.40,
-    prediction_source: "Preset Demo Baseline",
-    model_identity: "random_forest_regressor (Preset)",
-    status: "CANCELLED",
-    simulation_elapsed_seconds: 15.0,
-    stage_progress_pct: 0.0,
-    simulated_actual_duration_minutes: null,
-    delay_cause: "Customer cancelled during kitchen preparation stage"
-  },
-  {
     order_id: "BTM-SNACK-55",
+    courier_name: "Kavita P.",
+    restaurant_name: "Corner House (Jayanagar)",
+    customer_area: "BTM Layout 2nd Stage",
     restaurant_lat: 12.9165,
     restaurant_lon: 77.6101,
     customer_lat: 12.9290,
@@ -160,6 +133,54 @@ const DEFAULT_DEMO_ORDERS = [
     stage_progress_pct: 42.0,
     simulated_actual_duration_minutes: null,
     delay_cause: null
+  },
+  {
+    order_id: "WFD-BUFFET-03",
+    courier_name: "Manoj T.",
+    restaurant_name: "Barbeque Nation (Whitefield)",
+    customer_area: "ITPL Main Road",
+    restaurant_lat: 12.9698,
+    restaurant_lon: 77.7499,
+    customer_lat: 12.9980,
+    customer_lon: 77.7750,
+    order_hour: 20,
+    day_of_week: 4, // Friday
+    type_of_order: "Buffet",
+    festival: "No",
+    city: "Metropolitian",
+    predicted_duration_minutes: 32.1,
+    distance_km: 5.40,
+    prediction_source: "Preset Demo Baseline",
+    model_identity: "random_forest_regressor (Preset)",
+    status: "DELIVERED",
+    simulation_elapsed_seconds: 1950.0,
+    stage_progress_pct: 100.0,
+    simulated_actual_duration_minutes: 31.8,
+    delay_cause: "Simulated on-time arrival within SLA threshold"
+  },
+  {
+    order_id: "JAY-CAFE-19",
+    courier_name: "Naveen B.",
+    restaurant_name: "Brahmins Coffee Bar",
+    customer_area: "Basavanagudi Bull Temple Rd",
+    restaurant_lat: 12.9430,
+    restaurant_lon: 77.5710,
+    customer_lat: 12.9550,
+    customer_lon: 77.5850,
+    order_hour: 9,
+    day_of_week: 0, // Monday
+    type_of_order: "Snack",
+    festival: "No",
+    city: "Metropolitian",
+    predicted_duration_minutes: 14.2,
+    distance_km: 1.80,
+    prediction_source: "Preset Demo Baseline",
+    model_identity: "random_forest_regressor (Preset)",
+    status: "DELIVERED",
+    simulation_elapsed_seconds: 880.0,
+    stage_progress_pct: 100.0,
+    simulated_actual_duration_minutes: 14.5,
+    delay_cause: "Simulated on-time arrival within SLA threshold"
   }
 ];
 
@@ -186,57 +207,61 @@ const FEATURE_IMPORTANCES = [
 
 // Tab Titles dictionary for sticky topbar
 const TAB_TITLES = {
+  "tab-simulation": {
+    title: "Live Dispatch Map",
+    subtitle: "Real-time Bangalore courier routing along OSRM road geometry with automated SLA tracking"
+  },
+  "tab-predict": {
+    title: "Instant ETA Calculator",
+    subtitle: "Real-time delivery duration estimation at customer checkout with Explainable AI"
+  },
+  "tab-fleet": {
+    title: "Active Fleet & Orders Hub",
+    subtitle: "Real-time courier dispatch status, delivery lifecycle tracking, and order assignment"
+  },
+  "tab-delay": {
+    title: "Delay & SLA Analytics",
+    subtitle: "Automated root-cause analysis for delayed orders against promised delivery times"
+  },
+  "tab-scenarios": {
+    title: "Rush & Weather Surge Lab",
+    subtitle: "Sensitivity forecasting for peak dining hours, monsoon rains, and festival spikes"
+  },
+  "tab-operations": {
+    title: "Operations Telemetry",
+    subtitle: "Citywide dispatch throughput, active couriers, and on-time compliance rates"
+  },
   "tab-mlops-overview": {
-    title: "MLOps Platform Overview",
-    subtitle: "Production model lifecycle, experiment tracking & statistical drift guard"
+    title: "MLOps Architecture & System Health",
+    subtitle: "Production Random Forest model lifecycle, API latency telemetry, and drift guard metrics"
   },
   "tab-data-pipeline": {
-    title: "Data Governance & Pipeline",
-    subtitle: "Dataset provenance, schema validation audit & leakage-safe feature store"
+    title: "Data Governance & Anti-Leakage",
+    subtitle: "Dataset provenance, schema validation, and strict Tier 1 booking-time safeguards"
   },
   "tab-experiments": {
     title: "MLflow Experiment Tracking",
-    subtitle: "Reproducible model evaluation lab comparing Dummy, Ridge, and Random Forest"
+    subtitle: "Reproducible model benchmarking comparing Baseline, Ridge, and Random Forest"
   },
   "tab-model-registry": {
-    title: "Model Registry & Governance",
-    subtitle: "Cryptographic model versioning, staging status, and artifact manifests"
-  },
-  "tab-predict": {
-    title: "Live Booking-Time Inference",
-    subtitle: "Draggable coordinate workbench querying live POST /predict API"
+    title: "Model Registry & Versioning",
+    subtitle: "Production staging status, cryptographic hashes, and preprocessor manifests"
   },
   "tab-monitoring-drift": {
-    title: "Data & Prediction Drift Monitoring",
-    subtitle: "PSI, Kolmogorov-Smirnov, and Chi-Square statistical distribution shift tests"
+    title: "Data & Prediction Drift Guard",
+    subtitle: "Statistical distribution shift alerts using PSI and Kolmogorov-Smirnov tests"
   },
   "tab-model": {
-    title: "Model Evaluation & Importances",
-    subtitle: "Held-out test split benchmark & Gini impurity feature importance hierarchy"
+    title: "Model Benchmarks & Importances",
+    subtitle: "Held-out test split evaluation and primary route/temporal feature importances"
   },
   "tab-governance": {
-    title: "Reports & Governance Audit",
-    subtitle: "Data card, anti-leakage compliance checklist, and audit trails"
+    title: "Responsible AI & Fairness Audit",
+    subtitle: "Subgroup fairness verification across Bangalore city tiers and regional parity"
   },
-  "tab-operations": {
-    title: "Operations Overview (Synthetic Demo)",
-    subtitle: "Simulated fleet activity, active dispatches, and SLA compliance telemetry"
-  },
-  "tab-simulation": {
-    title: "Live Dispatch Simulation (Synthetic Demo)",
-    subtitle: "Deterministic multi-order execution engine with courier road routing"
-  },
-  "tab-fleet": {
-    title: "Fleet & Orders Grid (Synthetic Demo)",
-    subtitle: "Multi-order lifecycle tracking, filterable data grid, and order creation"
-  },
-  "tab-scenarios": {
-    title: "Scenario Lab (Synthetic Demo)",
-    subtitle: "Empirical sensitivity analysis querying live model across spatial variations"
-  },
-  "tab-delay": {
-    title: "Delay Analytics (Synthetic Demo)",
-    subtitle: "Pairwise evaluation of model predictions vs simulated outcomes"
+  "tab-mlops-hub": {
+    title: "MLOps Engineering & Viva Portal",
+    subtitle: "Topic 12 ETAFlow complete end-to-end MLOps verification for course grading and viva evaluation"
   }
 };
 
@@ -280,6 +305,8 @@ function bootstrapApp() {
   initFleetStore();
   initActivityLog();
   initNavigationTabs();
+  initGuidedTour();
+  initPresetSelectors();
 
   // MLOps Platform Inits
   loadMlflowExperiments();
@@ -354,8 +381,18 @@ function cacheDomElements() {
    NAVIGATION TAB MANAGEMENT
 ========================================================= */
 function initNavigationTabs() {
-  const navButtons = document.querySelectorAll(".nav-item");
-  navButtons.forEach((btn) => {
+  document.querySelectorAll(".zomato-nav-tab, .nav-item").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetTab = btn.getAttribute("data-tab");
+      if (targetTab) {
+        switchTab(targetTab);
+      }
+    });
+  });
+}
+
+function initGuidedTour() {
+  document.querySelectorAll(".tour-step-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       const targetTab = btn.getAttribute("data-tab");
       if (targetTab) {
@@ -366,6 +403,14 @@ function initNavigationTabs() {
 }
 
 function switchTab(tabId) {
+  // Update navbar active buttons
+  document.querySelectorAll(".zomato-nav-tab").forEach((b) => {
+    b.classList.remove("active");
+    if (b.getAttribute("data-tab") === tabId) {
+      b.classList.add("active");
+    }
+  });
+
   // Update sidebar active buttons
   document.querySelectorAll(".nav-item").forEach((b) => {
     b.classList.remove("active");
@@ -383,6 +428,14 @@ function switchTab(tabId) {
     targetPane.classList.add("active");
   }
 
+  // Sync Guided Tour step active indicator
+  document.querySelectorAll(".tour-step-btn").forEach((b) => {
+    b.classList.remove("active");
+    if (b.getAttribute("data-tab") === tabId) {
+      b.classList.add("active");
+    }
+  });
+
   // Update topbar header text
   if (TAB_TITLES[tabId]) {
     if (topbarPageTitle) topbarPageTitle.textContent = TAB_TITLES[tabId].title;
@@ -391,10 +444,12 @@ function switchTab(tabId) {
 
   // Invalidate maps if visible
   if (tabId === "tab-predict" && predictMap) {
-    setTimeout(() => predictMap.invalidateSize(), 150);
+    predictMap.invalidateSize();
+    setTimeout(() => { if (predictMap) predictMap.invalidateSize(); }, 150);
   }
   if (tabId === "tab-simulation" && simMap) {
-    setTimeout(() => simMap.invalidateSize(), 150);
+    simMap.invalidateSize();
+    setTimeout(() => { if (simMap) simMap.invalidateSize(); }, 150);
   }
 
   // Close mobile sidebar
@@ -532,13 +587,13 @@ async function loadDriftMonitoring() {
   try {
     const res = await fetch(`${API_BASE_URL}/reports/drift`);
     if (res.ok) driftData = await res.json();
-  } catch (e) {}
+  } catch (e) { }
 
   if (!driftData) {
     try {
       const resFallback = await fetch("./data/drift_report.json");
       if (resFallback.ok) driftData = await resFallback.json();
-    } catch (e) {}
+    } catch (e) { }
   }
 
   if (driftData) {
@@ -640,13 +695,13 @@ async function loadModelRegistry() {
   try {
     const res = await fetch(`${API_BASE_URL}/reports/registry`);
     if (res.ok) reg = await res.json();
-  } catch (e) {}
+  } catch (e) { }
 
   if (!reg) {
     try {
       const resFallback = await fetch("./data/registry.json");
       if (resFallback.ok) reg = await resFallback.json();
-    } catch (e) {}
+    } catch (e) { }
   }
 
   if (!reg || !reg.versions) return;
@@ -736,6 +791,110 @@ function initPredictionForm() {
   });
 }
 
+window.toggleCustomLocationMode = function (forcedOpen = null) {
+  const container = document.getElementById("custom-coords-container");
+  const icon = document.getElementById("btn-custom-toggle-icon");
+  const text = document.getElementById("btn-custom-toggle-text");
+  if (!container) return;
+
+  const isOpen = forcedOpen !== null ? !forcedOpen : (container.style.display !== "none");
+  if (isOpen) {
+    container.style.display = "none";
+    if (icon) icon.textContent = "✏️";
+    if (text) text.textContent = "Custom Location";
+  } else {
+    container.style.display = "block";
+    if (icon) icon.textContent = "✕";
+    if (text) text.textContent = "Close Custom";
+  }
+};
+
+function initPresetSelectors() {
+  const restSel = document.getElementById("preset-restaurant-select");
+  const custSel = document.getElementById("preset-customer-select");
+  if (!restSel || !custSel) return;
+
+  const updateFromPresets = () => {
+    if (restSel.value === "custom" || custSel.value === "custom") {
+      window.toggleCustomLocationMode(true);
+      return;
+    }
+
+    const [rLat, rLon] = restSel.value.split(",").map(Number);
+    const [cLat, cLon] = custSel.value.split(",").map(Number);
+    if (!isNaN(rLat) && !isNaN(rLon)) {
+      const elLat = document.getElementById("inp-rest-lat");
+      const elLon = document.getElementById("inp-rest-lon");
+      if (elLat) elLat.value = rLat.toFixed(4);
+      if (elLon) elLon.value = rLon.toFixed(4);
+      if (predictRestMarker) predictRestMarker.setLatLng([rLat, rLon]);
+    }
+    if (!isNaN(cLat) && !isNaN(cLon)) {
+      const elLat = document.getElementById("inp-cust-lat");
+      const elLon = document.getElementById("inp-cust-lon");
+      if (elLat) elLat.value = cLat.toFixed(4);
+      if (elLon) elLon.value = cLon.toFixed(4);
+      if (predictCustMarker) predictCustMarker.setLatLng([cLat, cLon]);
+    }
+    if (typeof updatePredictTrajectory === "function") {
+      updatePredictTrajectory();
+    }
+    executePrediction();
+  };
+
+  restSel.addEventListener("change", updateFromPresets);
+  custSel.addEventListener("change", updateFromPresets);
+
+  // Manual input listeners for custom coordinates
+  ["inp-rest-lat", "inp-rest-lon", "inp-cust-lat", "inp-cust-lon"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", () => {
+        const rLat = parseFloat(document.getElementById("inp-rest-lat").value);
+        const rLon = parseFloat(document.getElementById("inp-rest-lon").value);
+        const cLat = parseFloat(document.getElementById("inp-cust-lat").value);
+        const cLon = parseFloat(document.getElementById("inp-cust-lon").value);
+        if (!isNaN(rLat) && !isNaN(rLon) && predictRestMarker) {
+          predictRestMarker.setLatLng([rLat, rLon]);
+        }
+        if (!isNaN(cLat) && !isNaN(cLon) && predictCustMarker) {
+          predictCustMarker.setLatLng([cLat, cLon]);
+        }
+        if (typeof updatePredictTrajectory === "function") {
+          updatePredictTrajectory();
+        }
+      });
+    }
+  });
+}
+
+window.applyQuickRoute = function (restCoord, custCoord, restName, custName) {
+  const restSel = document.getElementById("preset-restaurant-select");
+  const custSel = document.getElementById("preset-customer-select");
+  if (restSel) restSel.value = restCoord;
+  if (custSel) custSel.value = custCoord;
+
+  const [rLat, rLon] = restCoord.split(",").map(Number);
+  const [cLat, cLon] = custCoord.split(",").map(Number);
+  const elRestLat = document.getElementById("inp-rest-lat");
+  const elRestLon = document.getElementById("inp-rest-lon");
+  const elCustLat = document.getElementById("inp-cust-lat");
+  const elCustLon = document.getElementById("inp-cust-lon");
+
+  if (elRestLat) elRestLat.value = rLat.toFixed(4);
+  if (elRestLon) elRestLon.value = rLon.toFixed(4);
+  if (elCustLat) elCustLat.value = cLat.toFixed(4);
+  if (elCustLon) elCustLon.value = cLon.toFixed(4);
+
+  if (predictRestMarker) predictRestMarker.setLatLng([rLat, rLon]);
+  if (predictCustMarker) predictCustMarker.setLatLng([cLat, cLon]);
+
+  if (typeof updatePredictTrajectory === "function") {
+    updatePredictTrajectory();
+  }
+  executePrediction();
+};
+
 function initQuickProbeButton() {
   const btnProbe = document.getElementById("btn-trigger-probe");
   if (!btnProbe) return;
@@ -759,6 +918,17 @@ async function executePrediction() {
   const type = document.getElementById("inp-order-type").value || "Meal";
   const festival = document.getElementById("inp-festival").value || "No";
   const city = document.getElementById("inp-city").value || "Metropolitian";
+
+  const btnText = document.getElementById("predict-btn-text");
+  const spinner = document.getElementById("predict-spinner");
+  if (btnText) btnText.classList.add("hidden");
+  if (spinner) spinner.classList.remove("hidden");
+
+  // Show directional pointing indicator
+  const pointPill = document.getElementById("predict-pointing-indicator");
+  if (pointPill) {
+    pointPill.style.display = "inline-flex";
+  }
 
   const payload = {
     order_id: `PROBE-${Date.now().toString().slice(-4)}`,
@@ -785,6 +955,15 @@ async function executePrediction() {
     if (res.ok) {
       const data = await res.json();
       updatePredictionOutput(data, roundTripMs);
+
+      // Trigger pop highlight animation on result card
+      const heroCard = document.getElementById("eta-hero-card");
+      if (heroCard) {
+        heroCard.classList.remove("result-highlight-pop");
+        void heroCard.offsetWidth; // Force reflow
+        heroCard.classList.add("result-highlight-pop");
+      }
+
       if (globalAlert) globalAlert.classList.add("hidden");
     } else {
       const err = await res.json();
@@ -795,6 +974,9 @@ async function executePrediction() {
       "API Offline",
       "Unable to connect to ETAFlow prediction server at http://127.0.0.1:8000. Start it via 'python pipelines/serve_api.py'."
     );
+  } finally {
+    if (btnText) btnText.classList.remove("hidden");
+    if (spinner) spinner.classList.add("hidden");
   }
 }
 
@@ -804,12 +986,128 @@ function updatePredictionOutput(data, latencyMs) {
   const latencyVal = document.getElementById("predict-latency-val");
   const modelIdVal = document.getElementById("predict-model-id-val");
   const jsonOutput = document.getElementById("predict-json-output");
+  const haversineHint = document.getElementById("predict-haversine-hint");
 
-  if (durationVal) durationVal.textContent = data.predicted_duration_minutes.toFixed(1);
+  // Animate the duration value counting smoothly
+  const targetDuration = data.predicted_duration_minutes;
+  if (durationVal) {
+    animateCounter(durationVal, parseFloat(durationVal.textContent) || 20.0, targetDuration, 400);
+  }
+
   if (distanceVal) distanceVal.textContent = `${data.distance_km.toFixed(2)} km`;
+  if (haversineHint) haversineHint.textContent = `Distance: ${data.distance_km.toFixed(2)} km`;
   if (latencyVal) latencyVal.textContent = `${latencyMs} ms`;
   if (modelIdVal) modelIdVal.textContent = data.model_identity || "random_forest_regressor";
   if (jsonOutput) jsonOutput.textContent = JSON.stringify(data, null, 2);
+
+  // Render High-Impact Explainable AI (XAI) feature attributions
+  const xaiList = document.getElementById("predict-xai-attributions-list");
+  if (xaiList && data.explanation && Array.isArray(data.explanation.attributions)) {
+    const baseVal = data.explanation.baseline_mean_minutes || 26.6;
+    const netAdj = data.explanation.net_model_adjustment_minutes !== undefined
+      ? data.explanation.net_model_adjustment_minutes
+      : (data.predicted_duration_minutes - baseVal);
+
+    const isNetDelay = netAdj > 0;
+    const netSign = isNetDelay ? "+" : "";
+    const netColor = isNetDelay ? "#DC2626" : "#059669";
+    const netBg = isNetDelay ? "#FEF2F2" : "#ECFDF5";
+    const netBorder = isNetDelay ? "#FECACA" : "#A7F3D0";
+
+    let html = `
+      <div class="xai-summary-banner">
+        <div>
+          <div style="font-size:0.75rem; color:#6B7280; font-weight:600; text-transform:uppercase;">Standard City Baseline</div>
+          <strong class="font-mono" style="font-size:1.15rem; color:#111827;">${baseVal.toFixed(1)} mins</strong>
+        </div>
+        <div style="font-size:1.4rem; color:#9CA3AF;">&rarr;</div>
+        <div>
+          <div style="font-size:0.75rem; color:#6B7280; font-weight:600; text-transform:uppercase;">Net Model Adjustment</div>
+          <span class="font-mono" style="font-size:1.15rem; font-weight:800; color:${netColor}; background:${netBg}; padding:0.2rem 0.65rem; border-radius:6px; border:1px solid ${netBorder}; display:inline-block;">
+            ${netSign}${netAdj.toFixed(2)} mins
+          </span>
+        </div>
+        <div style="font-size:1.4rem; color:#9CA3AF;">=</div>
+        <div>
+          <div style="font-size:0.75rem; color:#6B7280; font-weight:600; text-transform:uppercase;">Final Promised Delivery</div>
+          <strong class="font-mono" style="font-size:1.3rem; color:#E23744;">${targetDuration.toFixed(1)} mins</strong>
+        </div>
+      </div>
+    `;
+
+    // Find max absolute impact for relative meter widths
+    const maxImpact = Math.max(...data.explanation.attributions.map((a) => Math.abs(a.impact_minutes || 1)), 5.0);
+
+    data.explanation.attributions.forEach((attr) => {
+      const impact = attr.impact_minutes || 0;
+      const isPos = impact > 0.05;
+      const isNeg = impact < -0.05;
+      const sign = isPos ? "+" : "";
+      
+      let factorClass = "factor-neutral";
+      let badgeClass = "badge-neutral";
+      let barColor = "#9CA3AF";
+      let icon = "⚙️";
+
+      if (isPos) {
+        factorClass = "factor-delay";
+        badgeClass = "badge-delay";
+        barColor = "#E23744";
+      } else if (isNeg) {
+        factorClass = "factor-saving";
+        badgeClass = "badge-saving";
+        barColor = "#10B981";
+      }
+
+      const nameLower = (attr.feature_name || "").toLowerCase();
+      if (nameLower.includes("distance") || nameLower.includes("route")) icon = "📏";
+      else if (nameLower.includes("hour") || nameLower.includes("time")) icon = "🚦";
+      else if (nameLower.includes("festival") || nameLower.includes("surge")) icon = "🎪";
+      else if (nameLower.includes("city") || nameLower.includes("metro")) icon = "🏙️";
+      else if (nameLower.includes("order") || nameLower.includes("type")) icon = "🍳";
+      else if (nameLower.includes("day") || nameLower.includes("weekend")) icon = "📅";
+
+      const pctWidth = Math.min(100, Math.max(15, Math.round((Math.abs(impact) / maxImpact) * 100)));
+
+      html += `
+        <div class="xai-factor-card ${factorClass}">
+          <div class="xai-factor-header">
+            <div class="xai-factor-title">
+              <span style="font-size:1.15rem;">${icon}</span>
+              <span>${attr.feature_name}</span>
+              <span class="xai-factor-val-badge">${attr.feature_value}</span>
+            </div>
+            <div class="xai-impact-badge ${badgeClass}">
+              ${sign}${impact.toFixed(2)} min
+            </div>
+          </div>
+          <p class="xai-narrative-text">${attr.narrative}</p>
+          <div class="xai-impact-bar-wrap">
+            <div class="xai-impact-bar-fill" style="width:${pctWidth}%; background:${barColor};"></div>
+          </div>
+        </div>
+      `;
+    });
+
+    xaiList.innerHTML = html;
+  }
+}
+
+function animateCounter(element, start, end, durationMs) {
+  const startTime = performance.now();
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(1.0, elapsed / durationMs);
+    const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+    const currentVal = start + (end - start) * easeProgress;
+    element.textContent = currentVal.toFixed(1);
+    if (progress < 1.0) {
+      requestAnimationFrame(update);
+    } else {
+      element.textContent = end.toFixed(1);
+    }
+  }
+  requestAnimationFrame(update);
 }
 
 function initHourSlider() {
@@ -878,27 +1176,33 @@ function initPredictSpatialMap() {
   const mapElement = document.getElementById("predict-map");
   if (!mapElement || typeof L === "undefined") return;
 
+  if (predictMap) {
+    try { predictMap.remove(); } catch (e) { }
+    predictMap = null;
+  }
+
   try {
     predictMap = L.map("predict-map", {
       zoomControl: true,
       attributionControl: false
     }).setView([12.9450, 77.6320], 13);
 
-    // CartoDB Positron Light Tile Layer
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-      maxZoom: 19
+    // OpenStreetMap Free Tile Layer (No API Key Required)
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
     }).addTo(predictMap);
 
     const restIcon = L.divIcon({
       className: "custom-map-pin-rest",
-      html: `<div style="background:#7C3AED; color:#FFF; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,0.3); font-size:14px; border:2px solid #FFF;">🍳</div>`,
+      html: `<div style="background:#E23744; color:#FFF; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(226,55,68,0.4); font-size:14px; border:2px solid #FFF;">🍳</div>`,
       iconSize: [28, 28],
       iconAnchor: [14, 14]
     });
 
     const custIcon = L.divIcon({
       className: "custom-map-pin-cust",
-      html: `<div style="background:#E11D48; color:#FFF; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,0.3); font-size:14px; border:2px solid #FFF;">🏠</div>`,
+      html: `<div style="background:#111827; color:#FFF; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 6px rgba(0,0,0,0.3); font-size:14px; border:2px solid #FFF;">🏠</div>`,
       iconSize: [28, 28],
       iconAnchor: [14, 14]
     });
@@ -941,19 +1245,32 @@ async function updatePredictTrajectory() {
   const routeBadge = document.getElementById("predict-routing-badge");
 
   if (coords && coords.length > 0) {
-    predictPolyline = L.polyline(coords, { color: "#7C3AED", weight: 4, opacity: 0.8 }).addTo(predictMap);
+    predictPolyline = L.polyline(coords, { color: "#E23744", weight: 4, opacity: 0.85 }).addTo(predictMap);
     if (routeBadge) routeBadge.textContent = "OSRM Road Route";
   } else {
-    predictPolyline = L.polyline([[lat1, lon1], [lat2, lon2]], { color: "#7C3AED", weight: 3, dashArray: "5, 8" }).addTo(predictMap);
+    predictPolyline = L.polyline([[lat1, lon1], [lat2, lon2]], { color: "#E23744", weight: 3, dashArray: "5, 8" }).addTo(predictMap);
     if (routeBadge) routeBadge.textContent = "Geodesic Haversine Fallback";
   }
 
   predictMap.fitBounds([[lat1, lon1], [lat2, lon2]], { padding: [40, 40] });
 }
 
+let fleetMapLayers = {};
+let fleetRouteCache = {};
+
 function initSimulationMap() {
   const mapElement = document.getElementById("sim-map");
-  if (!mapElement || typeof L === "undefined") return;
+  if (!mapElement) return;
+
+  if (typeof L === "undefined") {
+    return;
+  }
+
+  if (simMap) {
+    try { simMap.remove(); } catch (e) { }
+    simMap = null;
+  }
+  fleetMapLayers = {};
 
   try {
     simMap = L.map("sim-map", {
@@ -961,63 +1278,206 @@ function initSimulationMap() {
       attributionControl: false
     }).setView([12.9450, 77.6320], 13);
 
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-      maxZoom: 19
+    // OpenStreetMap Free Tile Layer (No API Key Required)
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
     }).addTo(simMap);
 
-    focusSimulationMapOnActiveOrder();
+    renderAllFleetOnMap(false);
+
+    // Aggressive size invalidation to prevent blank white tile bug
+    simMap.invalidateSize();
+    setTimeout(() => { if (simMap) simMap.invalidateSize(); }, 100);
+    setTimeout(() => { if (simMap) simMap.invalidateSize(); }, 400);
+    setTimeout(() => { if (simMap) simMap.invalidateSize(); }, 1000);
+    window.addEventListener("resize", () => { if (simMap) simMap.invalidateSize(); });
   } catch (err) {
-    console.warn("Simulation map fallback", err);
+    console.warn("Simulation map initialization error", err);
   }
 }
 
-async function focusSimulationMapOnActiveOrder() {
+async function renderAllFleetOnMap(centerOnActive = false) {
   if (!simMap) return;
 
-  const order = appOrders.find((o) => o.order_id === activeSimOrderId) || appOrders[0];
-  if (!order) return;
+  // Active delivery orders to display on map simultaneously
+  const activeOrders = appOrders.filter(
+    (o) => o.status === "OUT_FOR_DELIVERY" || o.order_id === activeSimOrderId
+  );
 
-  if (simMapPolyline) simMap.removeLayer(simMapPolyline);
-  if (simCourierMarker) simMap.removeLayer(simCourierMarker);
-  Object.values(simMapMarkers).forEach((m) => simMap.removeLayer(m));
-  simMapMarkers = {};
+  const allBounds = [];
 
-  const restIcon = L.divIcon({
-    html: `<div style="background:#7C3AED; color:#FFF; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; border:2px solid #FFF;">🍳</div>`,
-    iconSize: [26, 26],
-    iconAnchor: [13, 13]
-  });
+  for (const order of activeOrders) {
+    const isFocused = (order.order_id === activeSimOrderId);
+    const orderId = order.order_id;
 
-  const custIcon = L.divIcon({
-    html: `<div style="background:#E11D48; color:#FFF; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; border:2px solid #FFF;">🏠</div>`,
-    iconSize: [26, 26],
-    iconAnchor: [13, 13]
-  });
+    // Fetch road coords or fallback interpolation
+    if (!fleetRouteCache[orderId]) {
+      const coords = await fetchRoadRoute(order.restaurant_lat, order.restaurant_lon, order.customer_lat, order.customer_lon);
+      if (coords && coords.length > 0) {
+        fleetRouteCache[orderId] = coords;
+      } else {
+        fleetRouteCache[orderId] = [
+          [order.restaurant_lat, order.restaurant_lon],
+          [order.restaurant_lat + 0.3 * (order.customer_lat - order.restaurant_lat) + 0.003, order.restaurant_lon + 0.3 * (order.customer_lon - order.restaurant_lon)],
+          [order.restaurant_lat + 0.7 * (order.customer_lat - order.restaurant_lat) - 0.002, order.restaurant_lon + 0.7 * (order.customer_lon - order.restaurant_lon)],
+          [order.customer_lat, order.customer_lon]
+        ];
+      }
+    }
 
-  const courierIcon = L.divIcon({
-    className: "pin-courier-wrapper",
-    html: `<div style="background:#0284C7; color:#FFF; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 10px rgba(2,132,199,0.5); border:2px solid #FFF; font-size:14px;">🛵</div>`,
-    iconSize: [28, 28],
-    iconAnchor: [14, 14]
-  });
+    const routeCoords = fleetRouteCache[orderId];
 
-  simMapMarkers.rest = L.marker([order.restaurant_lat, order.restaurant_lon], { icon: restIcon }).addTo(simMap);
-  simMapMarkers.cust = L.marker([order.customer_lat, order.customer_lon], { icon: custIcon }).addTo(simMap);
+    if (fleetMapLayers[orderId]) {
+      const l = fleetMapLayers[orderId];
+      if (l.polyline) {
+        l.polyline.setStyle({
+          color: isFocused ? "#E23744" : "#9CA3AF",
+          weight: isFocused ? 5 : 3,
+          opacity: isFocused ? 0.95 : 0.5,
+          dashArray: isFocused ? null : "4, 6"
+        });
+        if (isFocused && l.polyline.bringToFront) l.polyline.bringToFront();
+      }
+      if (l.courierMarker) {
+        const el = l.courierMarker.getElement();
+        if (el) {
+          const badge = el.querySelector(".bike-marker-badge");
+          if (badge) {
+            badge.className = `bike-marker-badge ${isFocused ? "focused" : ""}`;
+          }
+        }
+        if (isFocused && l.courierMarker.setZIndexOffset) l.courierMarker.setZIndexOffset(1000);
+        else if (l.courierMarker.setZIndexOffset) l.courierMarker.setZIndexOffset(100);
+      }
+    } else {
+      // Create Restaurant Marker
+      const restIcon = L.divIcon({
+        html: `<div title="${order.restaurant_name || order.order_id}" style="background:#E23744; color:#FFF; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border:2px solid #FFF; box-shadow:0 2px 6px rgba(226,55,68,0.4); font-size:14px; cursor:pointer;">🍳</div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
+      });
 
-  const coords = await fetchRoadRoute(order.restaurant_lat, order.restaurant_lon, order.customer_lat, order.customer_lon);
-  if (coords && coords.length > 0) {
-    simMapPolyline = L.polyline(coords, { color: "#0284C7", weight: 4, opacity: 0.85 }).addTo(simMap);
-  } else {
-    simMapPolyline = L.polyline([[order.restaurant_lat, order.restaurant_lon], [order.customer_lat, order.customer_lon]], { color: "#0284C7", weight: 3, dashArray: "5, 8" }).addTo(simMap);
+      // Create Customer Marker
+      const custIcon = L.divIcon({
+        html: `<div title="${order.customer_area || 'Customer'}" style="background:#111827; color:#FFF; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border:2px solid #FFF; box-shadow:0 2px 6px rgba(0,0,0,0.3); font-size:14px; cursor:pointer;">🏠</div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
+      });
+
+      const restMarker = L.marker([order.restaurant_lat, order.restaurant_lon], { icon: restIcon })
+        .addTo(simMap)
+        .bindTooltip(`<b>${order.restaurant_name || 'Restaurant'}</b><br><span style="color:#6B7280; font-size:11px;">Pickup • ${order.order_id}</span>`, { direction: 'top' });
+      restMarker.on("click", () => trackOrderInSim(orderId));
+
+      const custMarker = L.marker([order.customer_lat, order.customer_lon], { icon: custIcon })
+        .addTo(simMap)
+        .bindTooltip(`<b>${order.customer_area || 'Customer Address'}</b><br><span style="color:#6B7280; font-size:11px;">Dropoff • ${order.order_id}</span>`, { direction: 'top' });
+      custMarker.on("click", () => trackOrderInSim(orderId));
+
+      // Draw Route Polyline
+      const polyline = L.polyline(routeCoords, {
+        color: isFocused ? "#E23744" : "#9CA3AF",
+        weight: isFocused ? 5 : 3,
+        opacity: isFocused ? 0.95 : 0.5,
+        dashArray: isFocused ? null : "4, 6"
+      }).addTo(simMap);
+      polyline.on("click", () => trackOrderInSim(orderId));
+
+      // Calculate initial courier position along road
+      const pos = getCourierLatLng(order, routeCoords);
+      const courierName = order.courier_name || (order.order_id === "KOR-DINNER-88" ? "Rahul S." : order.order_id === "IND-LUNCH-42" ? "Suresh M." : "Amit K.");
+      const courierFirstName = courierName.split(" ")[0];
+
+      const courierIcon = L.divIcon({
+        className: "pin-fleet-courier",
+        html: `
+          <div class="bike-marker-badge ${isFocused ? 'focused' : ''}" id="bike-badge-${orderId}">
+            <span class="bike-icon">🛵</span>
+            <span class="bike-label">${courierFirstName}</span>
+          </div>
+        `,
+        iconSize: [85, 30],
+        iconAnchor: [42, 15]
+      });
+
+      const courierMarker = L.marker([pos.lat, pos.lon], {
+        icon: courierIcon,
+        zIndexOffset: isFocused ? 1000 : 100
+      }).addTo(simMap);
+      courierMarker.on("click", () => trackOrderInSim(orderId));
+
+      fleetMapLayers[orderId] = {
+        restMarker,
+        custMarker,
+        polyline,
+        courierMarker,
+        coords: routeCoords
+      };
+    }
+
+    allBounds.push([order.restaurant_lat, order.restaurant_lon]);
+    allBounds.push([order.customer_lat, order.customer_lon]);
   }
 
-  // Position courier
-  const progress = (order.stage_progress_pct || 0) / 100.0;
-  const cLat = order.restaurant_lat + progress * (order.customer_lat - order.restaurant_lat);
-  const cLon = order.restaurant_lon + progress * (order.customer_lon - order.restaurant_lon);
-  simCourierMarker = L.marker([cLat, cLon], { icon: courierIcon }).addTo(simMap);
+  // Camera framing
+  if (centerOnActive) {
+    const focusedOrder = appOrders.find((o) => o.order_id === activeSimOrderId);
+    if (focusedOrder) {
+      simMap.fitBounds([
+        [focusedOrder.restaurant_lat, focusedOrder.restaurant_lon],
+        [focusedOrder.customer_lat, focusedOrder.customer_lon]
+      ], { padding: [60, 60], maxZoom: 15 });
+    }
+  } else if (allBounds.length > 0 && !simMap._hasInitialFraming) {
+    simMap.fitBounds(allBounds, { padding: [50, 50] });
+    simMap._hasInitialFraming = true;
+  }
+}
 
-  simMap.fitBounds([[order.restaurant_lat, order.restaurant_lon], [order.customer_lat, order.customer_lon]], { padding: [50, 50] });
+function getCourierLatLng(order, routeCoords) {
+  const pct = Math.min(100.0, Math.max(0.0, order.stage_progress_pct || 0)) / 100.0;
+  if (routeCoords && routeCoords.length > 1) {
+    const exactIndex = pct * (routeCoords.length - 1);
+    const low = Math.floor(exactIndex);
+    const high = Math.min(routeCoords.length - 1, Math.ceil(exactIndex));
+    const remainder = exactIndex - low;
+    const p1 = routeCoords[low];
+    const p2 = routeCoords[high];
+    const lat = p1[0] + remainder * (p2[0] - p1[0]);
+    const lon = p1[1] + remainder * (p2[1] - p1[1]);
+    return { lat, lon };
+  }
+  const lat = order.restaurant_lat + pct * (order.customer_lat - order.restaurant_lat);
+  const lon = order.restaurant_lon + pct * (order.customer_lon - order.restaurant_lon);
+  return { lat, lon };
+}
+
+function updateAllFleetMarkers() {
+  if (!simMap) return;
+
+  appOrders.forEach((order) => {
+    const layer = fleetMapLayers[order.order_id];
+    if (!layer || !layer.courierMarker) return;
+
+    const coords = fleetRouteCache[order.order_id] || layer.coords;
+    const pos = getCourierLatLng(order, coords);
+    layer.courierMarker.setLatLng([pos.lat, pos.lon]);
+
+    const badgeEl = document.getElementById(`bike-badge-${order.order_id}`);
+    if (badgeEl) {
+      const courierName = order.courier_name || (order.order_id === "KOR-DINNER-88" ? "Rahul S." : order.order_id === "IND-LUNCH-42" ? "Suresh M." : "Amit K.");
+      const firstName = courierName.split(" ")[0];
+      const rem = Math.max(0, (order.predicted_duration_minutes || 20) - ((order.simulation_elapsed_seconds || 0) / 60.0));
+      const statusIcon = order.status === "DELIVERED" ? "✅" : "🛵";
+      const statusText = order.status === "DELIVERED" ? "Delivered" : `${rem.toFixed(0)}m`;
+      badgeEl.innerHTML = `<span class="bike-icon">${statusIcon}</span> <span class="bike-label">${firstName} • ${statusText}</span>`;
+    }
+  });
+}
+
+function focusSimulationMapOnActiveOrder() {
+  renderAllFleetOnMap(true);
 }
 
 /* ==========================================================
@@ -1069,7 +1529,7 @@ function resetSimulation() {
 
   initFleetStore(true);
   updateSimulationOrderCard(activeSimOrderId);
-  focusSimulationMapOnActiveOrder();
+  renderAllFleetOnMap(true);
   renderOperationsOverview();
 }
 
@@ -1080,7 +1540,7 @@ function tickSimulation(realDeltaSeconds) {
   const clockDisplay = document.getElementById("sim-clock-display");
   if (clockDisplay) clockDisplay.textContent = formatTime(simulationClockSeconds);
 
-  // Advance orders
+  // Advance all orders simultaneously
   appOrders.forEach((order) => {
     if (order.status === "DELIVERED" || order.status === "CANCELLED") return;
 
@@ -1104,6 +1564,9 @@ function tickSimulation(realDeltaSeconds) {
       order.status = "ORDER_RECEIVED";
     }
   });
+
+  // Move all courier bike pins on the map in real-time
+  updateAllFleetMarkers();
 
   saveFleetStore();
   updateSimulationOrderCard(activeSimOrderId);
@@ -1181,12 +1644,12 @@ function updateSimulationOrderCard(orderId) {
    APPENDIX: FLEET MANAGEMENT
 ========================================================== */
 function initFleetStore(forceReset = false) {
-  if (forceReset || !localStorage.getItem("etaflow_fleet_v4")) {
+  if (forceReset || !localStorage.getItem("etaflow_fleet_v5")) {
     appOrders = JSON.parse(JSON.stringify(DEFAULT_DEMO_ORDERS));
     saveFleetStore();
   } else {
     try {
-      appOrders = JSON.parse(localStorage.getItem("etaflow_fleet_v4"));
+      appOrders = JSON.parse(localStorage.getItem("etaflow_fleet_v5"));
     } catch (e) {
       appOrders = JSON.parse(JSON.stringify(DEFAULT_DEMO_ORDERS));
     }
@@ -1194,7 +1657,7 @@ function initFleetStore(forceReset = false) {
 }
 
 function saveFleetStore() {
-  localStorage.setItem("etaflow_fleet_v4", JSON.stringify(appOrders));
+  localStorage.setItem("etaflow_fleet_v5", JSON.stringify(appOrders));
 }
 
 function initFleetManager() {
@@ -1241,7 +1704,7 @@ async function refreshFleetModelEtas() {
         o.predicted_duration_minutes = d.predicted_duration_minutes;
         o.prediction_source = "Random Forest API (Live)";
       }
-    } catch (e) {}
+    } catch (e) { }
   }
   saveFleetStore();
   renderFleetTable();
@@ -1285,18 +1748,44 @@ function renderFleetTable() {
         <td class="font-mono">${o.distance_km.toFixed(2)} km</td>
         <td>${progress}</td>
         <td>
-          <button type="button" class="btn btn-secondary btn-sm" onclick="trackOrderInSim('${o.order_id}')">Track</button>
+          <button type="button" class="btn btn-secondary btn-sm" style="background:#FFF0F1; border-color:#FDC7CC; color:#E23744; font-weight:700;" onclick="trackOrderInSim('${o.order_id}')">🗺️ Live Track</button>
         </td>
       </tr>
     `;
   }).join("");
 }
 
-window.trackOrderInSim = function(orderId) {
+window.trackOrderInSim = function (orderId) {
   activeSimOrderId = orderId;
   switchTab("tab-simulation");
   updateSimulationOrderCard(orderId);
   focusSimulationMapOnActiveOrder();
+
+  // Update order chips active styling
+  document.querySelectorAll(".order-chip").forEach((chip) => {
+    chip.classList.remove("active");
+    if (chip.textContent.includes(orderId)) {
+      chip.classList.add("active");
+    }
+  });
+};
+
+window.applyQuickScenario = async function (name, hour, day, type, fest, city) {
+  const elName = document.getElementById("scenario-name-input");
+  const elHour = document.getElementById("scenario-hour-select");
+  const elDay = document.getElementById("scenario-day-select");
+  const elType = document.getElementById("scenario-type-select");
+  const elFest = document.getElementById("scenario-festival-select");
+  const elCity = document.getElementById("scenario-city-select");
+
+  if (elName) elName.value = name;
+  if (elHour) elHour.value = hour;
+  if (elDay) elDay.value = day;
+  if (elType) elType.value = type;
+  if (elFest) elFest.value = fest;
+  if (elCity) elCity.value = city;
+
+  await addScenario();
 };
 
 /* ==========================================================
@@ -1395,7 +1884,7 @@ function renderScenariosTable() {
   }).join("");
 }
 
-window.removeScenario = function(id) {
+window.removeScenario = function (id) {
   scenariosList = scenariosList.filter((s) => s.id !== id);
   renderScenariosTable();
 };
@@ -1619,8 +2108,8 @@ function calculateHaversine(lat1, lon1, lat2, lon2) {
   const dLat = (lat2 - lat1) * (Math.PI / 180.0);
   const dLon = (lon2 - lon1) * (Math.PI / 180.0);
   const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * (Math.PI / 180.0)) * Math.cos(lat2 * (Math.PI / 180.0)) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    Math.cos(lat1 * (Math.PI / 180.0)) * Math.cos(lat2 * (Math.PI / 180.0)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }

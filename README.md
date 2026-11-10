@@ -171,31 +171,42 @@ For each completed simulated delivery, the system computes:
 - Python 3.11+ in a local virtual environment (`.venv`).
 - PowerShell terminal on Windows (or bash on Linux/macOS).
 
-### Running Unit & Integration Tests (54 Tests)
-Run the full test suite verifying preprocessors, models, API contracts, simulation state machines, and delay intelligence:
+### 1-Click Launch (Recommended)
+Double-click [start.bat](file:///c:/Users/Chinmayee/OneDrive/Documents/ETA-%20mlop/start.bat) on Windows (or run `./start.sh` on Linux/macOS). It will automatically:
+1. Start the prediction API server (`http://127.0.0.1:8000`).
+2. Start the operations web dashboard (`http://127.0.0.1:8501`).
+3. Launch your browser directly to the application.
 
+### Docker Containerized Deployment
+```bash
+docker compose up --build
+```
+- API Endpoint: `http://127.0.0.1:8000`
+- Web Dashboard: `http://127.0.0.1:8501`
+
+### Running Unit & Integration Tests (82 Tests)
 ```powershell
 $env:PYTHONPATH = "src"
-.\.venv\Scripts\python.exe -m unittest discover -s tests
+.\.venv\Scripts\pytest
 ```
 
-### Launching the Backend API
-Start the prediction service on port 8000:
-
+### Running Batch Inference Pipeline
 ```powershell
 $env:PYTHONPATH = "src"
-.\.venv\Scripts\python.exe pipelines\serve_api.py
+.\.venv\Scripts\python.exe pipelines\batch_predict.py
 ```
-- Serving at: `http://127.0.0.1:8000`
-- Available endpoints: `GET /health`, `POST /predict`
 
-### Launching the Frontend Platform
-In a separate terminal, launch the web dashboard on port 8501:
-
+### Running Latency & Throughput Benchmark
 ```powershell
-.\.venv\Scripts\python.exe -m http.server 8501 --directory app
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe scripts\benchmark_latency.py --iterations 500
 ```
-- Open in your web browser: **`http://127.0.0.1:8501`**
+
+### Running Responsible AI Subgroup Fairness Audit
+```powershell
+$env:PYTHONPATH = "src"
+.\.venv\Scripts\python.exe pipelines\audit_fairness.py
+```
 
 ---
 

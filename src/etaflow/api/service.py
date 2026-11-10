@@ -7,6 +7,7 @@ import joblib
 import pandas as pd
 
 from etaflow.api.schema import ETAPredictionRequest, ETAPredictionResponse
+from etaflow.evaluation.xai import generate_local_explanation
 from etaflow.features.pipeline import calculate_haversine_distance
 
 logger = logging.getLogger(__name__)
@@ -185,10 +186,22 @@ class ETAPredictionService:
         # Run inference through Random Forest
         raw_prediction = float(self.model.predict(df_17)[0])
 
+        # Generate Explainable AI (XAI) feature attribution
+        explanation = generate_local_explanation(
+            distance_km=distance_km,
+            order_hour=request.order_hour,
+            day_of_week=request.day_of_week,
+            type_of_order=request.type_of_order,
+            festival=request.festival,
+            city=request.city,
+            predicted_eta=raw_prediction,
+        )
+
         return ETAPredictionResponse(
             predicted_duration_minutes=raw_prediction,
             model_identity=self.model_identity,
             distance_km=distance_km,
             order_id=request.order_id,
             prediction_stage="booking_time",
+            explanation=explanation,
         )

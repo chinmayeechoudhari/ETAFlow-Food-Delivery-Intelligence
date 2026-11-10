@@ -1,0 +1,18 @@
+{
+  "model_identity": "random_forest_regressor",
+  "iterations": 500,
+  "total_elapsed_seconds": 31.07,
+  "throughput_rps": 16.09,
+  "latency_metrics_ms": {
+    "mean": 62.136,
+    "std": 17.896,
+    "min": 35.057,
+    "p50_median": 55.178,
+    "p90": 87.521,
+    "p95": 96.214,
+    "p99": 119.679,
+    "max": 161.581
+  },
+  "target_sla_ms": 10.0,
+  "sla_compliance_rate_percent": 0.0
+}

@@ -272,6 +272,7 @@ class ETAPredictionResponse:
     prediction_stage: str = "booking_time"
     model_version: str = "0.1.0"
     metadata: Dict[str, Any] = field(default_factory=dict)
+    explanation: Optional[Dict[str, Any]] = None
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert response to clean JSON-serializable dictionary."""
@@ -283,4 +284,6 @@ class ETAPredictionResponse:
         }
         if self.order_id is not None:
             payload["order_id"] = self.order_id
+        if self.explanation is not None:
+            payload["explanation"] = self.explanation
         return payload
