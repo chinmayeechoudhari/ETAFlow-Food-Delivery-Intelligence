@@ -5,6 +5,12 @@ from pathlib import Path
 import sys
 import yaml
 
+# Ensure project src directory is always on python path regardless of how the script is launched
+project_root = Path(__file__).resolve().parents[1]
+src_path = str(project_root / "src")
+if src_path not in sys.path:
+    sys.path.insert(0, src_path)
+
 from etaflow.api.app import run_server
 from etaflow.api.service import ETAPredictionService
 
@@ -18,7 +24,6 @@ def main() -> None:
 
     args = parser.parse_args()
 
-    project_root = Path(__file__).resolve().parents[1]
     cfg_path = project_root / args.config
 
     host = "127.0.0.1"
