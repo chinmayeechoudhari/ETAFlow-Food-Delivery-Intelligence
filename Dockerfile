@@ -16,13 +16,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     procps \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy packaging configuration and install dependencies
-COPY pyproject.toml .
+# Copy project files first so setuptools finds src/ and README.md
+COPY . .
+
+# Install packaging and project dependencies
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -e ".[dev]" mlflow
-
-# Copy project files
-COPY . .
 
 # Ensure .env is present
 RUN if [ ! -f .env ]; then cp .env.example .env; fi
@@ -36,4 +35,3 @@ HEALTHCHECK --interval=15s --timeout=5s --start-period=5s --retries=3 \
 
 # Start both API and frontend dashboard
 CMD sh -c "python pipelines/serve_api.py & python -m http.server 8501 --directory app"
-
