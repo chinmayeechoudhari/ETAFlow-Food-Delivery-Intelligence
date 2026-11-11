@@ -124,3 +124,4 @@ When the professor or evaluator asks about AWS CI/CD, use these structured answe
 
 #### Q4: "How do you ensure zero downtime during model updates?"
 > *"AWS App Runner and ECS use rolling green/blue updates. The orchestrator spins up the new container with the updated Random Forest model, polls our `/health` check endpoint until it returns HTTP 200, directs incoming traffic to the new container, and only then tears down the old container."*
+
