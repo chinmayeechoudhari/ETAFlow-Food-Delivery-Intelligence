@@ -1058,7 +1058,7 @@ function updatePredictionOutput(data, latencyMs) {
       const isPos = impact > 0.05;
       const isNeg = impact < -0.05;
       const sign = isPos ? "+" : "";
-      
+
       let factorClass = "factor-neutral";
       let badgeClass = "badge-neutral";
       let barColor = "#9CA3AF";

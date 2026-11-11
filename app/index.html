@@ -788,18 +788,20 @@
             </div>
           </div>
 
-          <!-- Card 7: Docker Containerization & CI/CD -->
+          <!-- Card 7: AWS Cloud CI/CD & ECR Deployment -->
           <div class="zomato-card" style="padding:1.25rem;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-              <strong style="font-size:0.9rem; color:#111827;">7. Docker Containerization &amp; CI/CD</strong>
-              <span class="badge" style="background:#E0F2FE; color:#0369A1; font-weight:700;">DOCKER READY</span>
+              <strong style="font-size:0.9rem; color:#111827;">7. AWS Cloud CI/CD &amp; Amazon ECR Deployment</strong>
+              <span class="badge" style="background:#FFF7ED; color:#C2410C; border:1px solid #FFEDD5; font-weight:700;">AWS ECR + APP RUNNER</span>
             </div>
             <p style="font-size:0.75rem; color:#6B7280; margin-bottom:0.5rem;">
-              Production packaging and continuous delivery workflows configured:
+              Enterprise cloud containerization with continuous delivery and automated AWS deployment:
             </p>
-            <div style="font-size:0.72rem; background:#F9FAFB; padding:0.6rem; border-radius:6px; border:1px solid #E5E7EB;">
-              <div>Container: <code>Dockerfile</code> + <code>docker-compose.yml</code> exposing port 8000 and 8501</div>
-              <div style="margin-top:0.25rem;">Pipeline: <code>.github/workflows/ci.yml</code> (Ruff linting, Pytest 82 tests, artifact bundle)</div>
+            <div style="font-size:0.72rem; background:#F9FAFB; padding:0.65rem; border-radius:6px; border:1px solid #E5E7EB; line-height:1.5;">
+              <div><strong>Registry:</strong> Amazon ECR (<code>etaflow-delivery-api:latest</code>) via <code>aws-actions</code></div>
+              <div style="margin-top:0.2rem;"><strong>Compute Target:</strong> AWS App Runner (Serverless) / Amazon ECS Fargate</div>
+              <div style="margin-top:0.2rem;"><strong>CI Gates:</strong> 82 Pytest gates, Ruff linting, Responsible AI audit (<code>.github/workflows/ci.yml</code>)</div>
+              <div style="margin-top:0.2rem;"><strong>AWS Native Spec:</strong> <code>buildspec.yml</code> configured for AWS CodePipeline &amp; CodeBuild</div>
             </div>
           </div>
 

@@ -1,0 +1,54 @@
+version: 0.2
+
+# AWS CodeBuild Specification for ETAFlow MLOps Pipeline
+# Orchestrates test verification, Docker packaging, and Amazon ECR publishing
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "Installing system packages and dependencies..."
+      - python -m pip install --upgrade pip
+      - pip install -e ".[dev]" mlflow
+
+  pre_build:
+    commands:
+      - echo "Setting up environment..."
+      - cp .env.example .env
+      - export PYTHONPATH=src
+      - echo "Running Ruff linting..."
+      - ruff check src pipelines tests
+      - echo "Executing Pytest test suite (82 test gates)..."
+      - pytest -v --durations=10
+      - echo "Running Batch Prediction & Latency Benchmarks..."
+      - python pipelines/batch_predict.py
+      - python scripts/benchmark_latency.py --iterations 50
+      - python pipelines/audit_fairness.py
+      - echo "Logging in to Amazon ECR..."
+      - AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+      - ECR_REPO="${IMAGE_REPO_NAME:-etaflow-delivery-api}"
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:-latest}
+
+  build:
+    commands:
+      - echo "Building ETAFlow Docker image on $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG ..."
+      - docker build -t $ECR_REGISTRY/$ECR_REPO:latest .
+      - docker tag $ECR_REGISTRY/$ECR_REPO:latest $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+
+  post_build:
+    commands:
+      - echo "Pushing Docker image to Amazon ECR..."
+      - docker push $ECR_REGISTRY/$ECR_REPO:latest
+      - docker push $ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG
+      - echo "Writing image definitions file for Amazon ECS / AWS App Runner..."
+      - printf '[{"name":"etaflow-container","imageUri":"%s"}]' "$ECR_REGISTRY/$ECR_REPO:$IMAGE_TAG" > imagedefinitions.json
+      - echo "Build completed successfully on $(date)."
+
+artifacts:
+  files:
+    - imagedefinitions.json
+    - reports/**/*
