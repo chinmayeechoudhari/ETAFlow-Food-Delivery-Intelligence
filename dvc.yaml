@@ -1,0 +1,30 @@
+stages:
+  prepare:
+    cmd: python pipelines/prepare_data.py
+    deps:
+      - data/raw/zomato_cleaned.csv
+      - pipelines/prepare_data.py
+      - configs/config.yaml
+    outs:
+      - data/processed/train.parquet
+      - data/processed/test.parquet
+
+  train:
+    cmd: python pipelines/train_mlflow.py
+    deps:
+      - data/processed/train.parquet
+      - pipelines/train_mlflow.py
+      - configs/config.yaml
+    outs:
+      - models/random_forest_regressor.joblib
+      - models/preprocessor.joblib
+      - models/registry.json
+
+  evaluate:
+    cmd: python scripts/benchmark_latency.py --iterations 100
+    deps:
+      - models/random_forest_regressor.joblib
+      - scripts/benchmark_latency.py
+    metrics:
+      - reports/latency_benchmark.json:
+          cache: false
