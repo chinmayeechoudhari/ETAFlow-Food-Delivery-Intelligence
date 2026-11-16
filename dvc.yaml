@@ -28,3 +28,4 @@ stages:
     metrics:
       - reports/latency_benchmark.json:
           cache: false
+

@@ -11,3 +11,4 @@ scrape_configs:
           app: 'etaflow'
           env: 'production'
           model: 'random_forest_regressor'
+
