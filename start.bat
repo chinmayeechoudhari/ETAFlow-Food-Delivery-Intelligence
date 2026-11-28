@@ -1,7 +1,7 @@
 @echo off
 TITLE ETAFlow - Smart Delivery Intelligence Platform
 echo ===========================================================================
-echo ETAFlow: MLOps & Delivery Intelligence Platform Launcher
+echo ETAFlow: MLOps ^& Delivery Intelligence Platform Launcher
 echo ===========================================================================
 echo.
 
@@ -22,23 +22,19 @@ IF NOT EXIST ".env" (
     )
 )
 
-echo [1/3] Starting ETAFlow Prediction API on http://127.0.0.1:8000 ...
-start "ETAFlow API Service" /min cmd /c "cd /d "%~dp0" && set "PYTHONPATH=%~dp0src" && "%PY_BIN%" pipelines\serve_api.py"
+echo [1/2] Opening ETAFlow in your browser in a few seconds: http://127.0.0.1:8000/
+start "" /min cmd /c "timeout /t 3 /nobreak >nul && start "" "http://127.0.0.1:8000/""
 
-echo [2/3] Waiting for API service to become ready...
-timeout /t 3 /nobreak >nul
-
-echo [3/3] Opening Web Dashboard on http://127.0.0.1:8501 ...
-start "" "http://127.0.0.1:8501"
-
+echo [2/2] Starting ETAFlow (API + dashboard on one server) ...
 echo.
 echo ===========================================================================
-echo ETAFlow is actively running!
-echo - API Server:  http://127.0.0.1:8000 (Health: http://127.0.0.1:8000/health)
-echo - Dashboard:   http://127.0.0.1:8501
+echo ETAFlow is running:
+echo - Dashboard:  http://127.0.0.1:8000/
+echo - API docs:   http://127.0.0.1:8000/docs
+echo - Health:     http://127.0.0.1:8000/health
 echo.
 echo Leave this window open while using the platform. Press CTRL+C to stop.
 echo ===========================================================================
 echo.
 
-"%PY_BIN%" -m http.server 8501 --directory app
+"%PY_BIN%" pipelines\serve_api.py

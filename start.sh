@@ -20,26 +20,22 @@ if [ ! -f ".env" ] && [ -f ".env.example" ]; then
     cp .env.example .env
 fi
 
-echo "[1/3] Starting ETAFlow Prediction API on http://127.0.0.1:8000 ..."
 export PYTHONPATH="src"
-.venv/bin/python pipelines/serve_api.py &
-API_PID=$!
+URL="http://127.0.0.1:8000/"
 
-trap "kill $API_PID 2>/dev/null || true" EXIT
+echo "[1/2] Opening ETAFlow in your browser in a few seconds: $URL"
+(
+    sleep 3
+    if command -v xdg-open > /dev/null; then
+        xdg-open "$URL"
+    elif command -v open > /dev/null; then
+        open "$URL"
+    fi
+) &
 
-echo "[2/3] Waiting for API service to become ready..."
-sleep 2
-
-echo "[3/3] Launching Web Dashboard on http://127.0.0.1:8501 ..."
-if command -v xdg-open > /dev/null; then
-    xdg-open "http://127.0.0.1:8501" &
-elif command -v open > /dev/null; then
-    open "http://127.0.0.1:8501" &
-fi
-
+echo "[2/2] Starting ETAFlow (API + dashboard on one server) ..."
 echo "==========================================================================="
-echo "ETAFlow is actively running! Press CTRL+C to terminate both services."
+echo "Dashboard: $URL   API docs: ${URL}docs   Press CTRL+C to stop."
 echo "==========================================================================="
 
-.venv/bin/python -m http.server 8501 --directory app
-
+.venv/bin/python pipelines/serve_api.py

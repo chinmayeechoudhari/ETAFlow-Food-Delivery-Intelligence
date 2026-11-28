@@ -10,7 +10,20 @@
  * 7. Appendix: Deterministic Dispatch Simulation, OSRM Routing, Fleet Grid, Scenario Lab & Delay Analytics
  */
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+/**
+ * API address. When the dashboard is served by the ETAFlow server itself (locally on :8000,
+ * in Docker, or on AWS), the API lives on the same origin, so relative URLs are used.
+ * Opened from the legacy static server on :8501 or straight from disk, it falls back to the
+ * local API on 127.0.0.1:8000.
+ */
+function resolveApiBaseUrl(loc) {
+  if (loc.protocol === "file:" || loc.port === "8501") {
+    return "http://127.0.0.1:8000";
+  }
+  return "";
+}
+
+const API_BASE_URL = resolveApiBaseUrl(window.location);
 
 // Predefined verified demo locations around Bangalore with explicit source tags
 const DEFAULT_DEMO_ORDERS = [
@@ -987,7 +1000,7 @@ async function executePrediction() {
   } catch (err) {
     showGlobalError(
       "API Offline",
-      "Unable to connect to ETAFlow prediction server at http://127.0.0.1:8000. Start it via 'python pipelines/serve_api.py'."
+      "Unable to reach the ETAFlow prediction server. Start it with start.bat or 'python pipelines/serve_api.py'."
     );
   } finally {
     if (btnText) btnText.classList.remove("hidden");
@@ -2062,7 +2075,7 @@ function initModalHandlers() {
         const errBanner = document.getElementById("modal-error-banner");
         const errText = document.getElementById("modal-error-text");
         if (errBanner && errText) {
-          errText.textContent = "Cannot calculate ML prediction: ETAFlow API is currently offline at http://127.0.0.1:8000. Start the server via 'python pipelines/serve_api.py'. Orders will not be created with fabricated model predictions.";
+          errText.textContent = "Cannot calculate ML prediction: Unable to reach the ETAFlow prediction server. Start it with start.bat or 'python pipelines/serve_api.py'. Orders will not be created with fabricated model predictions.";
           errBanner.classList.remove("hidden");
         }
       }
