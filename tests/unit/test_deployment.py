@@ -231,6 +231,34 @@ class TestDeploymentConfig(unittest.TestCase):
         self.assertNotIn("LatestAmiId", params)
         self.assertEqual(params["AmiId"]["Type"], "AWS::EC2::Image::Id")
 
+    def test_deploy_role_trusts_githubs_id_based_subject(self) -> None:
+        """GitHub's OIDC token for this repo carries owner and repo ids, e.g. (seen in CloudTrail):
+        repo:chinmayeechoudhari@190323353/ETAFlow-Food-Delivery-Intelligence@1452948068:ref:refs/heads/main
+        """
+        import yaml
+
+        class CfnLoader(yaml.SafeLoader):
+            pass
+
+        def construct_tagged(loader, suffix, node):
+            if isinstance(node, yaml.ScalarNode):
+                return loader.construct_scalar(node)
+            if isinstance(node, yaml.SequenceNode):
+                return loader.construct_sequence(node, deep=True)
+            return loader.construct_mapping(node, deep=True)
+
+        CfnLoader.add_multi_constructor("!", construct_tagged)
+        tpl = yaml.load((PROJECT_ROOT / "deploy/aws/etaflow-stack.yaml").read_text(encoding="utf-8"), Loader=CfnLoader)
+        params = tpl["Parameters"]
+        self.assertEqual(params["GitHubOwnerId"]["Default"], "190323353")
+        self.assertEqual(params["GitHubRepoId"]["Default"], "1452948068")
+        condition = tpl["Resources"]["GitHubDeployRole"]["Properties"]["AssumeRolePolicyDocument"]["Statement"][0][
+            "Condition"
+        ]["StringEquals"]
+        subjects = [s[0] if isinstance(s, list) else s for s in condition["token.actions.githubusercontent.com:sub"]]
+        self.assertIn("repo:${GitHubRepo}:ref:refs/heads/${GitHubBranch}", subjects)
+        self.assertIn("repo:${Owner}@${GitHubOwnerId}/${Name}@${GitHubRepoId}:ref:refs/heads/${GitHubBranch}", subjects)
+
     def test_shell_scripts_always_check_out_with_lf(self) -> None:
         """A Windows clone with core.autocrlf=true must not turn remote-deploy.sh into CRLF (bash fails on \\r)."""
         out = subprocess.run(

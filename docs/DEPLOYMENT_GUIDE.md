@@ -155,7 +155,10 @@ A repository admin opens *GitHub repo → Settings → Secrets and variables →
 
 After that, every push to `main` that passes CI is deployed automatically. You can also start it by hand from *Actions → ETAFlow Deploy (AWS EC2) → Run workflow*.
 
-Only **pushes to `main` of this repository** are deployed. CI also runs for pull requests, including pull requests from forks, but a pull request's CI result never triggers a deploy, so unreviewed code can't reach the server. The AWS deploy role also trusts only the repository `chinmayeechoudhari/ETAFlow-Food-Delivery-Intelligence`, branch `main`. To deploy from a different repository or branch, re-run `create-stack.ps1 -GitHubRepo owner/name -GitHubBranch branch` and update the `if:` condition in `.github/workflows/deploy.yml`.
+Only **pushes to `main` of this repository** are deployed. CI also runs for pull requests, including pull requests from forks, but a pull request's CI result never triggers a deploy, so unreviewed code can't reach the server. The AWS deploy role also trusts only the repository `chinmayeechoudhari/ETAFlow-Food-Delivery-Intelligence`, branch `main`. GitHub's identity token names the repository by its permanent numeric IDs as well as its name (`repo:owner@OWNER_ID/name@REPO_ID:ref:refs/heads/main`), and the role accepts that form, pinned to this repository's IDs. To deploy from a different repository or branch:
+1. Look up the new IDs at `https://api.github.com/repos/OWNER/NAME`: the `id` field and `owner.id`.
+2. Re-run `create-stack.ps1 -GitHubRepo owner/name -GitHubBranch branch -GitHubOwnerId <owner.id> -GitHubRepoId <id>`.
+3. Update the `if:` condition in `.github/workflows/deploy.yml`.
 
 ---
 

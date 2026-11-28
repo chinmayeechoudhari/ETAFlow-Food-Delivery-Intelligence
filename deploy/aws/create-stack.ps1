@@ -15,7 +15,10 @@ param(
     [ValidateSet("t3.micro", "t3.small")][string]$InstanceType = "t3.micro",
     [ValidateSet("true", "false")][string]$CreateGitHubOidcProvider = "true",
     [string]$GitHubRepo = "chinmayeechoudhari/ETAFlow-Food-Delivery-Intelligence",
-    [string]$GitHubBranch = "main"
+    [string]$GitHubBranch = "main",
+    # GitHub's numeric ids for the owner and repo (in its OIDC token). See https://api.github.com/repos/OWNER/NAME
+    [string]$GitHubOwnerId = "190323353",
+    [string]$GitHubRepoId = "1452948068"
 )
 $ErrorActionPreference = "Stop"
 . "$PSScriptRoot\EtaflowStack.ps1"
@@ -30,7 +33,7 @@ aws cloudformation deploy `
     --template-file $template `
     --capabilities CAPABILITY_NAMED_IAM `
     --no-fail-on-empty-changeset `
-    --parameter-overrides "AmiId=$amiId" "InstanceType=$InstanceType" "CreateGitHubOidcProvider=$CreateGitHubOidcProvider" "GitHubRepo=$GitHubRepo" "GitHubBranch=$GitHubBranch"
+    --parameter-overrides "AmiId=$amiId" "InstanceType=$InstanceType" "CreateGitHubOidcProvider=$CreateGitHubOidcProvider" "GitHubRepo=$GitHubRepo" "GitHubBranch=$GitHubBranch" "GitHubOwnerId=$GitHubOwnerId" "GitHubRepoId=$GitHubRepoId"
 Assert-NativeSuccess "CloudFormation deploy"
 
 $o = Get-EtaflowStackOutput -StackName $StackName -Region $Region

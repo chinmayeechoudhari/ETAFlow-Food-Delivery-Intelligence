@@ -19,6 +19,18 @@ Parameters:
     Type: String
     Default: main
     Description: Branch whose workflows may assume the deploy role.
+  GitHubOwnerId:
+    Type: String
+    Default: "190323353"
+    AllowedPattern: "^[0-9]+$"
+    Description: >-
+      Numeric id of the repository owner. GitHub puts it in the OIDC subject
+      (repo:owner@OWNER_ID/name@REPO_ID:...). Look it up at https://api.github.com/repos/OWNER/NAME (owner.id).
+  GitHubRepoId:
+    Type: String
+    Default: "1452948068"
+    AllowedPattern: "^[0-9]+$"
+    Description: Numeric id of the repository (field "id" at https://api.github.com/repos/OWNER/NAME).
   CreateGitHubOidcProvider:
     Type: String
     Default: "true"
@@ -212,7 +224,14 @@ Resources:
             Condition:
               StringEquals:
                 token.actions.githubusercontent.com:aud: sts.amazonaws.com
-                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubRepo}:ref:refs/heads/${GitHubBranch}
+                # GitHub sends either the classic subject or the id-based one
+                # (repo:owner@OWNER_ID/name@REPO_ID:...); accept both, pinned to this repo and branch.
+                token.actions.githubusercontent.com:sub:
+                  - !Sub repo:${GitHubRepo}:ref:refs/heads/${GitHubBranch}
+                  - !Sub
+                    - repo:${Owner}@${GitHubOwnerId}/${Name}@${GitHubRepoId}:ref:refs/heads/${GitHubBranch}
+                    - Owner: !Select [0, !Split ["/", !Ref GitHubRepo]]
+                      Name: !Select [1, !Split ["/", !Ref GitHubRepo]]
       Policies:
         - PolicyName: etaflow-deploy
           PolicyDocument:
