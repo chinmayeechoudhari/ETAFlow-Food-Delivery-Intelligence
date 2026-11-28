@@ -64,37 +64,3 @@ jobs:
         with:
           name: etaflow-evaluation-reports
           path: reports/
-
-  deploy-to-aws:
-    name: 🚀 Build, Push to Amazon ECR & Deploy (AWS)
-    needs: lint-and-test
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Log in to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build, Tag, and Push Docker Image to Amazon ECR
-        env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: etaflow-delivery-api
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          echo "Building container: $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-          docker build -t $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $REGISTRY/$ECR_REPOSITORY:latest .
-          echo "Pushing images to Amazon ECR..."
-          docker push $REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          docker push $REGISTRY/$ECR_REPOSITORY:latest
-          echo "✅ Successfully built and pushed Docker image to Amazon ECR: $REGISTRY/$ECR_REPOSITORY:latest"
