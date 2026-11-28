@@ -172,19 +172,23 @@ For each completed simulated delivery, the system computes:
 - PowerShell terminal on Windows (or bash on Linux/macOS).
 
 ### 1-Click Launch (Recommended)
-Double-click [start.bat](file:///c:/Users/Chinmayee/OneDrive/Documents/ETA-%20mlop/start.bat) on Windows (or run `./start.sh` on Linux/macOS). It will automatically:
-1. Start the prediction API server (`http://127.0.0.1:8000`).
-2. Start the operations web dashboard (`http://127.0.0.1:8501`).
-3. Launch your browser directly to the application.
+Double-click `start.bat` on Windows (or run `./start.sh` on Linux/macOS). It starts one FastAPI server that serves both the API and the dashboard, and opens your browser:
+- Operations dashboard: `http://127.0.0.1:8000/`
+- Interactive API docs (Swagger UI): `http://127.0.0.1:8000/docs`
+- Health check: `http://127.0.0.1:8000/health`
 
-### Docker Containerized Deployment
+### Docker Containerized Stack (App + Prometheus + Grafana)
 ```bash
-docker compose up --build
+docker compose up -d --build
 ```
-- API Endpoint: `http://127.0.0.1:8000`
-- Web Dashboard: `http://127.0.0.1:8501`
+- Dashboard and API: `http://127.0.0.1:8000/` (docs at `/docs`)
+- Grafana monitoring: `http://127.0.0.1:3000/` (anonymous read-only; admin login `admin` / `admin` locally)
+- Prometheus: `http://127.0.0.1:9090/` (scrapes `/metrics/prometheus`)
 
-### Running Unit & Integration Tests (82 Tests)
+### AWS Cloud Deployment (EC2 + Docker Compose)
+The same stack runs on one AWS EC2 server, created from a CloudFormation template and redeployed automatically by GitHub Actions after CI passes. See [docs/DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md).
+
+### Running Unit & Integration Tests (102 Tests)
 ```powershell
 $env:PYTHONPATH = "src"
 .\.venv\Scripts\pytest
