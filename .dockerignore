@@ -10,3 +10,21 @@ __pycache__
 .coverage
 htmlcov
 .DS_Store
+
+# Secrets and local environment files never go into the image
+.env
+.env.*
+!.env.example
+
+# Not needed to serve the model; keeps the image small
+mlflow.db
+mlartifacts/
+*.pptx
+*.docx
+.venv*/
+docs/
+tests/
+deploy/aws/
+.github/
+.claude/
+.superpowers/

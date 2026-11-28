@@ -1,23 +1,52 @@
-version: '3.8'
+# ETAFlow local stack: app (API + dashboard) + Prometheus + Grafana.
+#   docker compose up -d --build
+#   Dashboard:  http://127.0.0.1:8000/      API docs: http://127.0.0.1:8000/docs
+#   Grafana:    http://127.0.0.1:3000/      Prometheus: http://127.0.0.1:9090/
+# On the AWS server this file is combined with docker-compose.prod.yml.
 
 services:
   etaflow:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: etaflow_platform
+    build: .
+    image: etaflow-app:local
+    container_name: etaflow_app
     ports:
-      - "8000:8000"   # Prediction API Endpoint
-      - "8501:8501"   # Operations & MLOps Web Dashboard
-    environment:
-      - APP_ENV=production
-      - API_HOST=0.0.0.0
-      - API_PORT=8000
-      - PYTHONPATH=/app/src
+      - "8000:8000"
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 3
 
+  prometheus:
+    image: prom/prometheus:v3.15.1
+    container_name: etaflow_prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.retention.time=7d"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+    depends_on:
+      - etaflow
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana-oss:12.4.3
+    container_name: etaflow_grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD:-admin}
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/grafana_dashboard.json
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana_dashboard.json:/var/lib/grafana/dashboards/grafana_dashboard.json:ro
+      - grafana-data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  prometheus-data:
+  grafana-data:
