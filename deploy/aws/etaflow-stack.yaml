@@ -1,0 +1,274 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  ETAFlow deployment: one EC2 server running Docker Compose (app + Prometheus + Grafana),
+  an ECR repository for the app image, an S3 bucket for deploy bundles, and a GitHub
+  OIDC role so GitHub Actions can deploy without stored AWS keys.
+  Create with deploy/aws/create-stack.ps1, delete with deploy/aws/delete-stack.ps1.
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t3.micro
+    AllowedValues: [t3.micro, t3.small]
+    Description: t3.micro (1 GB RAM + 2 GB swap) is the cheapest; use t3.small if it runs out of memory.
+  GitHubRepo:
+    Type: String
+    Default: chinmayeechoudhari/ETAFlow-Food-Delivery-Intelligence
+    Description: owner/name of the GitHub repository allowed to deploy.
+  GitHubBranch:
+    Type: String
+    Default: main
+    Description: Branch whose workflows may assume the deploy role.
+  CreateGitHubOidcProvider:
+    Type: String
+    Default: "true"
+    AllowedValues: ["true", "false"]
+    Description: Set to false if this AWS account already has the GitHub OIDC provider.
+  AmiId:
+    Type: AWS::EC2::Image::Id
+    Description: >-
+      Amazon Linux 2023 AMI id. create-stack.ps1 looks up the latest one on first create and
+      reuses the same id on every update, so re-running it never replaces the server.
+
+Conditions:
+  CreateOidcProvider: !Equals [!Ref CreateGitHubOidcProvider, "true"]
+
+Resources:
+  EcrRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: etaflow-app
+      EmptyOnDelete: true
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      LifecyclePolicy:
+        LifecyclePolicyText: |
+          {
+            "rules": [
+              {
+                "rulePriority": 1,
+                "description": "Keep only the 10 most recent images",
+                "selection": {"tagStatus": "any", "countType": "imageCountMoreThan", "countNumber": 10},
+                "action": {"type": "expire"}
+              }
+            ]
+          }
+
+  BundleBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: BucketOwnerEnforced
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpireOldBundles
+            Status: Enabled
+            Prefix: bundle/
+            ExpirationInDays: 30
+
+  ServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: ETAFlow server - dashboard/API on 80, Grafana on 3000. No SSH (use SSM Session Manager).
+      SecurityGroupIngress:
+        - Description: ETAFlow dashboard and API
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - Description: Grafana
+          IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          CidrIp: 0.0.0.0/0
+
+  ServerRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+      Policies:
+        - PolicyName: etaflow-server-access
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: ReadDeployBundles
+                Effect: Allow
+                Action: s3:GetObject
+                Resource: !Sub ${BundleBucket.Arn}/bundle/*
+              - Sid: ReadEtaflowParameters
+                Effect: Allow
+                Action: ssm:GetParameter
+                Resource: !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/etaflow/*
+
+  ServerInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref ServerRole
+
+  Server:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref AmiId
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref ServerInstanceProfile
+      SecurityGroupIds:
+        - !GetAtt ServerSecurityGroup.GroupId
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp3
+            VolumeSize: 20
+            Encrypted: true
+            DeleteOnTermination: true
+      MetadataOptions:
+        HttpTokens: required
+        HttpEndpoint: enabled
+      Tags:
+        - Key: Name
+          Value: etaflow-server
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          set -euxo pipefail
+          dnf install -y docker
+          systemctl enable --now docker
+          # Docker Compose v2 plugin, pinned and checksum-verified
+          COMPOSE_VERSION=v5.6.1
+          mkdir -p /usr/local/lib/docker/cli-plugins
+          cd /usr/local/lib/docker/cli-plugins
+          curl -fsSLO "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-linux-x86_64"
+          curl -fsSLO "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-linux-x86_64.sha256"
+          sha256sum -c docker-compose-linux-x86_64.sha256
+          mv docker-compose-linux-x86_64 docker-compose
+          chmod +x docker-compose
+          rm -f docker-compose-linux-x86_64.sha256
+          docker compose version
+          # 2 GB swap so app + Prometheus + Grafana fit on a 1 GB t3.micro
+          if [ ! -f /swapfile ]; then
+            fallocate -l 2G /swapfile
+            chmod 600 /swapfile
+            mkswap /swapfile
+            swapon /swapfile
+            echo '/swapfile swap swap defaults 0 0' >> /etc/fstab
+          fi
+          mkdir -p /opt/etaflow
+
+  ServerElasticIp:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      InstanceId: !Ref Server
+      Tags:
+        - Key: Name
+          Value: etaflow-server
+
+  GitHubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Condition: CreateOidcProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      ThumbprintList:
+        - 6938fd4d98bab03faadb97b34396831e3780aea1
+        - 1c58a3a8518e8759bf075b76b750d4f2df264fcd
+
+  GitHubDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: etaflow-github-deploy
+      Description: Assumed by GitHub Actions (OIDC) to deploy ETAFlow to the EC2 server.
+      MaxSessionDuration: 3600
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !If
+                - CreateOidcProvider
+                - !Ref GitHubOidcProvider
+                - !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubRepo}:ref:refs/heads/${GitHubBranch}
+      Policies:
+        - PolicyName: etaflow-deploy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: EcrLogin
+                Effect: Allow
+                Action: ecr:GetAuthorizationToken
+                Resource: "*"
+              - Sid: EcrPush
+                Effect: Allow
+                Action:
+                  - ecr:BatchCheckLayerAvailability
+                  - ecr:BatchGetImage
+                  - ecr:CompleteLayerUpload
+                  - ecr:GetDownloadUrlForLayer
+                  - ecr:InitiateLayerUpload
+                  - ecr:PutImage
+                  - ecr:UploadLayerPart
+                Resource: !GetAtt EcrRepository.Arn
+              - Sid: UploadBundles
+                Effect: Allow
+                Action: s3:PutObject
+                Resource: !Sub ${BundleBucket.Arn}/bundle/*
+              - Sid: RunDeployOnServer
+                Effect: Allow
+                Action: ssm:SendCommand
+                Resource:
+                  - !Sub arn:${AWS::Partition}:ec2:${AWS::Region}:${AWS::AccountId}:instance/${Server}
+                  - !Sub arn:${AWS::Partition}:ssm:${AWS::Region}::document/AWS-RunShellScript
+              - Sid: ReadDeployResult
+                Effect: Allow
+                Action:
+                  - ssm:GetCommandInvocation
+                  - ssm:ListCommandInvocations
+                Resource: "*"
+
+Outputs:
+  DashboardUrl:
+    Description: ETAFlow dashboard (API docs at /docs)
+    Value: !Sub http://${ServerElasticIp}
+  GrafanaUrl:
+    Description: Grafana monitoring dashboard
+    Value: !Sub http://${ServerElasticIp}:3000
+  EcrRepositoryUri:
+    Description: ECR repository for the app image
+    Value: !GetAtt EcrRepository.RepositoryUri
+  InstanceId:
+    Description: EC2 server instance id
+    Value: !Ref Server
+  BundleBucket:
+    Description: S3 bucket holding deploy bundles
+    Value: !Ref BundleBucket
+  DeployRoleArn:
+    Description: IAM role GitHub Actions assumes through OIDC
+    Value: !GetAtt GitHubDeployRole.Arn
+  Region:
+    Description: AWS region of this stack
+    Value: !Ref AWS::Region
