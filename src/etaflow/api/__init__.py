@@ -1,6 +1,6 @@
 """API and serving interfaces for ETAFlow."""
 
-from etaflow.api.app import ETAPredictionHTTPHandler, create_api_server, run_server
+from etaflow.api.app import ServerHandle, create_api_server, create_app, run_server
 from etaflow.api.schema import (
     FORBIDDEN_POST_BOOKING_FIELDS,
     VALID_CITIES,
@@ -16,7 +16,8 @@ __all__ = [
     "ETAPredictionResponse",
     "ETAPredictionService",
     "ArtifactUnavailableError",
-    "ETAPredictionHTTPHandler",
+    "ServerHandle",
+    "create_app",
     "create_api_server",
     "run_server",
     "VALID_TYPES_OF_ORDER",

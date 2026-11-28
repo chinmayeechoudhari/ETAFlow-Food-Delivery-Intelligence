@@ -2,10 +2,29 @@
 
 from collections import deque
 from datetime import datetime, timezone
+import json
 import math
+from pathlib import Path
 import threading
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Iterator, List, Optional, Tuple
+
+from prometheus_client import (
+    CONTENT_TYPE_LATEST,
+    CollectorRegistry,
+    Counter,
+    Gauge,
+    Histogram,
+    PlatformCollector,
+    ProcessCollector,
+    generate_latest,
+)
+from prometheus_client.core import GaugeMetricFamily
+from prometheus_client.registry import Collector
+
+DEFAULT_DRIFT_REPORT_PATH = Path(__file__).resolve().parents[3] / "reports" / "monitoring" / "drift_report.json"
+
+INFERENCE_LATENCY_BUCKETS = (0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5)
 
 
 class APIMetricsTracker:
@@ -121,3 +140,66 @@ class APIMetricsTracker:
                     "p99": p99,
                 },
             }
+
+
+class _DriftFlagCollector(Collector):
+    """Reads the latest drift report at scrape time and exposes it as a 0/1 gauge."""
+
+    def __init__(self, drift_report_path: Path) -> None:
+        self.drift_report_path = drift_report_path
+
+    def _drift_detected(self) -> float:
+        try:
+            with open(self.drift_report_path, "r", encoding="utf-8") as f:
+                report = json.load(f)
+            status = report["clean_batch_results"]["overall_status"]
+        except (OSError, ValueError, KeyError, TypeError):
+            return 0.0
+        return 0.0 if status == "STABLE" else 1.0
+
+    def collect(self) -> Iterator[GaugeMetricFamily]:
+        yield GaugeMetricFamily(
+            "etaflow_data_drift_detected_flag",
+            "1 when the latest drift report flags the clean batch as drifted, otherwise 0.",
+            value=self._drift_detected(),
+        )
+
+
+class PrometheusMetrics:
+    """Prometheus metrics for the prediction API, named to match monitoring/grafana_dashboard.json."""
+
+    def __init__(self, drift_report_path: Optional[Path] = None) -> None:
+        self.registry = CollectorRegistry()
+        ProcessCollector(registry=self.registry)
+        PlatformCollector(registry=self.registry)
+        self.http_requests = Counter(
+            "etaflow_http_requests",
+            "API requests handled, by HTTP status code.",
+            ["status"],
+            registry=self.registry,
+        )
+        self.inference_duration = Histogram(
+            "etaflow_inference_duration_seconds",
+            "Wall-clock duration of successful /predict requests.",
+            buckets=INFERENCE_LATENCY_BUCKETS,
+            registry=self.registry,
+        )
+        self.predicted_duration = Gauge(
+            "etaflow_predicted_duration_minutes",
+            "Most recent predicted delivery duration in minutes.",
+            registry=self.registry,
+        )
+        self.registry.register(_DriftFlagCollector(Path(drift_report_path or DEFAULT_DRIFT_REPORT_PATH)))
+
+    def record_request(self, status_code: int) -> None:
+        """Count one handled API request under its status code."""
+        self.http_requests.labels(status=str(int(status_code))).inc()
+
+    def record_prediction(self, latency_seconds: float, predicted_minutes: float) -> None:
+        """Record latency and the predicted ETA of one successful prediction."""
+        self.inference_duration.observe(max(0.0, float(latency_seconds)))
+        self.predicted_duration.set(float(predicted_minutes))
+
+    def render(self) -> Tuple[bytes, str]:
+        """Return the Prometheus text exposition body and its content type."""
+        return generate_latest(self.registry), CONTENT_TYPE_LATEST

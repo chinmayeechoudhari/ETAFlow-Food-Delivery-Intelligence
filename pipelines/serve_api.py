@@ -1,6 +1,7 @@
 """CLI runner to serve the ETAFlow prediction API locally."""
 
 import argparse
+import os
 from pathlib import Path
 import sys
 import yaml
@@ -13,6 +14,7 @@ if src_path not in sys.path:
 
 from etaflow.api.app import run_server
 from etaflow.api.service import ETAPredictionService
+from etaflow.api.settings import resolve_bind_address
 
 
 def main() -> None:
@@ -26,25 +28,20 @@ def main() -> None:
 
     cfg_path = project_root / args.config
 
-    host = "127.0.0.1"
-    port = 8000
+    api_cfg: dict = {}
     model_name = "random_forest_regressor"
 
     if cfg_path.exists():
         try:
             with open(cfg_path, "r", encoding="utf-8") as f:
                 cfg = yaml.safe_load(f)
-            api_cfg = cfg.get("api", {})
-            host = api_cfg.get("host", host)
-            port = int(api_cfg.get("port", port))
+            api_cfg = cfg.get("api", {}) or {}
             model_name = api_cfg.get("model_name", model_name)
         except Exception as exc:
             print(f"Warning: Could not read config file ({exc}). Falling back to defaults.")
 
-    if args.host:
-        host = args.host
-    if args.port:
-        port = args.port
+    # CLI flags > API_HOST/API_PORT environment variables > config.yaml > defaults
+    host, port = resolve_bind_address(args.host, args.port, api_cfg, dict(os.environ))
 
     print("Initializing ETAFlow Prediction Service...")
     service = ETAPredictionService(model_identity=model_name)
